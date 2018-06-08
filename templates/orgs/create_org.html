@@ -1,0 +1,28 @@
+{% extends 'header.html' %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<form method="post">
+				{% csrf_token %}
+				{% for field in form %}
+					<p align="left">
+					<div class="form-group row">
+						<label class="col-sm-3 col-form-label">{{ field.label }}</label>
+						<div class="col-sm-9"> {{ field }} </div>
+					</div>
+					{% if field.help_text %}
+						<small style="display: none">{{ field.help_text }}</small>
+					{% endif %}
+					{% for error in field.errors %}
+						<p style="color: red">{{ error }}</p>
+					{% endfor %}
+					</p>
+				{% endfor %}
+				<button class="btn btn-primary" style="padding-left: 150px; padding-right: 150px;" type="submit">Create</button>
+			</form>
+		</div>
+
+		<div class="col-md-2"></div>
+	</div>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "header.html" %}
+
+
+{% block content %}
+	<div class="row">
+			<div class="col-md-2"></div>
+			<div class="col-md-8">
+				<div class="jumbotron">
+				{#    <img class="img-fluid" src="/static/img/logo.png">#}
+				<h1 class="display-1" style="margin-bottom: 50px;">
+					Comm
+				</h1>
+				<form method="post">
+					{% csrf_token %}
+					{{ form.as_p }}
+					<button type="submit" class="btn btn-primary">Login</button>
+					<a href="/accounts/signup">
+						<button type="button" class="btn btn-secondary">Sign Up</button>
+					</a>
+				</form>
+			</div>
+	</div>
+{% endblock %}
