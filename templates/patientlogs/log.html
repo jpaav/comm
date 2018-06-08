@@ -2,11 +2,31 @@
 {% block content %}
 	<div class="row">
 		<div class="col-md-2"></div>
-		<div class="col-md-8">
-			<h1 class="display-1">
-				{{ log.name }}
-			</h1>
-
+		<div class="col-md-8" style="text-align: left;">
+			<h1 class="display-1">{{ log.name }}</h1>
+			<div align="right">
+				<a href="/logs/{{ log.id }}/new_entry/">
+					<button class="btn btn-success" style="padding-left: 50px; padding-right: 50px;">New Entry</button>
+				</a>
+			</div>
+			<div>
+				{% if entries.all|length == 0 %}
+					<p class="lead" style="margin-top: 20vh;">No Entries yet... Hit the button above to write the first one!</p>
+				{% endif %}
+				{% for entry in entries %}
+					<div class="jumbotron" style="text-align: left; width: 480px; padding-bottom: 32px; padding-top: 32px">
+						<div class="row">
+							<p class="h1">{{ entry.logger }}</p>
+						</div>
+						<div class="row">
+							<p class="lead">{{ entry.message }}</p>
+						</div>
+						<div class="row">
+							<i class="fas fa-angle-down"></i>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
 		</div>
 	</div>
 {% endblock %}
