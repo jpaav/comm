@@ -8,8 +8,8 @@ from patientlog.models import Log
 def org(request, org_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
-	org = Org.objects.filter(pk=org_id)
-	return render(request, 'orgs/org.html')
+	org = Org.objects.get(pk=org_id)
+	return render(request, 'orgs/org.html', {'org': org})
 
 
 def create_org(request):

@@ -1,4 +1,51 @@
 {% extends 'header.html' %}
 {% block content %}
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-8" align="left">
+			<h1 class="display-1">{{ org.name }}</h1>
+			<p class="lead">
+				{{ org.description }}
+			</p>
+			<div class="card">
+	            <div class="card-header" role="tab" id="headingOne">
+	                <h5>
+	                    <a data-toggle="collapse" href="#collapseOne" role="button" aria-expanded="true"
+	                       aria-controls="collapseOne">
+	                        {{ org.location }}
+	                    </a>
+	                </h5>
+	            </div>
 
+	            <div id="collapseOne" class="collapse toggle" role="tabpanel" aria-labelledby="headingOne"
+	                 data-parent="#accordion">
+
+	                <div class="embed-responsive embed-responsive-16by9">
+	                    <iframe class="embed-responsive-item"
+	                            src="https://www.google.com/maps/embed/v1/search?q={{ org.location }}&key=AIzaSyB-YQD-s4ery8KQRnzX7FhZsBC4SeFRcjA"
+	                            allowfullscreen></iframe>
+	                </div>
+
+	                <p class="text-danger mb-0">Map requires a valid address to work</p>
+	            </div>
+	        </div>
+		</div>
+		<div class="col-md-3" align="left">
+			<a href="/orgs/{{ org.id }}/tags/" style="text-decoration:none;">
+				<button class="btn btn-primary btn-lg btn-block"
+				        style="text-align: left; margin-bottom: 24px; padding-top: 24px; padding-bottom: 24px;">
+					Tags
+					<i class="fas fa-angle-right"></i>
+				</button>
+			</a>
+			<a href="/orgs/{{ org.id }}/residents" style="text-decoration:none;">
+				<button class="btn btn-primary btn-lg btn-block"
+				        style="text-align: left; margin-bottom: 24px; padding-top: 24px; padding-bottom: 24px;">
+					Residents
+					<i class="fas fa-angle-right"></i>
+				</button>
+			</a>
+
+		</div>
+	</div>
 {% endblock %}
