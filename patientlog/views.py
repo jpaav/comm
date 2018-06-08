@@ -2,7 +2,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 
 from patientlog.forms import CreateEntryForm
-from patientlog.models import Log, Entry
+from patientlog.models import Log, Entry, Resident
+
+
+def get_form_kwargs(self):
+	kwargs = super(self).get_form_kwargs()
+	kwargs.update({'residents': Resident()})
+	return kwargs
 
 
 def log(request, log_id):
@@ -21,9 +27,9 @@ def new_entry(request, log_id):
 		return redirect('/login/')
 	log = Log.objects.get(pk=log_id)
 	if request.method == 'GET':
-		form = CreateEntryForm()
+		form = CreateEntryForm(residents=Resident.objects.filter(org=log.org))
 	else:
-		form = CreateEntryForm(request.POST)
+		form = CreateEntryForm(request.POST, residents=Resident.objects.filter(org=log.org))
 		if form.is_valid():
 			entry = form.save(commit=False)
 			entry.logger = request.user
