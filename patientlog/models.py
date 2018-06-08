@@ -10,7 +10,18 @@ class Tag(models.Model):
 	title = models.CharField(max_length=100)
 	org = models.ForeignKey(
 		Org,
-		null=False
+		null=False,
+		related_name='tag_org'
+	)
+
+
+class Resident(models.Model):
+	objects = models.Manager()
+	name = models.CharField(max_length=50)
+	org = models.ForeignKey(
+		Org,
+		null=True,
+		related_name='resident_org'
 	)
 
 
@@ -19,7 +30,7 @@ class Log(models.Model):
 	org = models.ForeignKey(
 		Org,
 		null=True,
-		related_name='org',
+		related_name='log_org',
 	)
 	name = models.CharField(max_length=50, null=True)
 	description = models.CharField(max_length=1000, null=True)
@@ -29,7 +40,7 @@ class Log(models.Model):
 class Entry(models.Model):
 	objects = models.Manager()
 	participants = models.ForeignKey(
-		User,
+		Resident,
 		null=True,
 		related_name='participants'
 	)
