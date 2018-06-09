@@ -1,0 +1,33 @@
+{% if detail is not None %}
+	<h1 class="display-4">
+		{{ detail.logger.get_full_name }}
+	</h1>
+	<span class="lead">
+		{{ detail.timestamp }}
+	</span>
+	<span class="lead" style="float: right;">
+		{% for tag in detail.tags.all %}
+			<button class="btn btn-sm" style="background-color: #{{ tag.color }}">
+				{{ tag.title }}
+			</button>
+		{% endfor %}
+	</span>
+
+	<hr>
+	{% if detail.residents.count == 0 %}
+		<p class="lead">
+			No Residents listed
+		</p>
+	{% else %}
+		<p class="lead">
+			Residents involved:
+			{% for resident in detail.residents.all %}
+				{{ resident.name }},
+			{% endfor %}
+		</p>
+	{% endif %}
+	<hr>
+	<p class="lead">
+		{{ detail.message }}
+	</p>
+{% endif %}

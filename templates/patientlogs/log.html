@@ -1,40 +1,42 @@
 {% extends 'header.html' %}
 {% block content %}
+	<h1 class="display-2 mb-3">{{ log.name }} Log</h1>
 	<div class="row">
 		<div class="col-md-2"></div>
-		<div class="col-md-8" style="text-align: left;">
-			<h1 class="display-1">{{ log.name }} Log</h1>
-			<div align="right">
-				<a class="btn-link" href="/logs/{{ log.id }}/new_entry/" style="text-decoration:none">
-					<button class="btn btn-primary btn-lg">
-						<i class="fas fa-edit"></i>
-					</button>
-				</a>
-				<a href="/orgs/{{ log.org.id }}/" style="text-decoration:none">
-					<button class="btn btn-default btn-lg">
-						<i class="far fa-building"></i>
-					</button>
-				</a>
-			</div>
-			<div>
-				{# This if statement checks if there are no entries to show a friendly message #}
-				{% if entries.all|length == 0 %}
-					<p class="lead" style="margin-top: 20vh;">No Entries yet... Hit the button above to write the first one!</p>
-				{% endif %}
-				{# This for loop renders an entry card for each entry in the log #}
-				{% for entry in entries %}
-					<div class="jumbotron" style="text-align: left; width: 480px; padding-bottom: 32px; padding-top: 32px">
-						<div class="row">
-							<p class="h1">{{ entry.logger }}</p>
-						</div>
-						<div class="row">
-							<p class="lead">{{ entry.message }}</p>
-						</div>
-						<div class="row">
-							<i class="fas fa-angle-down"></i>
+		<div class="col-md-8">
+			<div class="row">
+				<div class="col-md-5" align="left">
+					<div class="mb-3 row">
+						<div class="btn-group btn-group-lg" role="group" aria-label="Entry Tools">
+							<a class="btn btn-primary" href="/logs/{{ log.id }}/new_entry/">
+								<i class="fas fa-edit"></i>
+							</a>
+							<a class="btn btn-secondary" href="/orgs/{{ log.org.id }}/">
+								<i class="far fa-building"></i>
+							</a>
+							<button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<i class="fas fa-filter"></i>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="btnGroupDrop">
+								<a class="dropdown-item" href="?filter=newest">Newest</a>
+								<a class="dropdown-item" href="?filter=oldest">Oldest</a>
+							</div>
 						</div>
 					</div>
-				{% endfor %}
+					<div class="row">
+						{# This if statement checks if there are no entries to show a friendly message #}
+						{% if entries.all|length == 0 %}
+							<p class="lead" style="margin-top: 20vh;">No Entries yet... Hit the button above to write the first one!</p>
+						{% endif %}
+						{# This for loop renders an entry card for each entry in the log #}
+						{% for entry in entries %}
+							{% include 'patientlogs/entry_fragment.html' %}
+						{% endfor %}
+					</div>
+				</div>
+				<div class="col-md-7 expanded-entry" align="left">
+					{% include 'patientlogs/entry_detail.html' %}
+				</div>
 			</div>
 		</div>
 	</div>

@@ -1,0 +1,16 @@
+<div class="jumbotron py-3" style="text-align: left; padding-left: 16px; padding-right: 25%;">
+	<div class="row" style="padding-left: 16px;">
+		<div class="col-md-10">
+			<p class="lead mb-0">{{ entry.logger.get_full_name }}</p>
+			<p class="small">{{ entry.timestamp }}</p>
+		</div>
+		<div class="col-md-2">
+			<div class="pl-4 pt-1"
+			     style="border-radius: 50%; background-color: #FFFFFF; height: 75px; width: 75px; margin-right: 10px;">
+				<a href="/logs/{{ log.id }}/entry/{{ entry.id }}">
+					<i class="fas fa-angle-right fa-4x"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>

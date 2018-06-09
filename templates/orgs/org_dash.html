@@ -7,43 +7,19 @@
 
 			<div class="row" style="margin-bottom: 24px;">
 				<div class="col-md-3">
-					<a href="/orgs/create/">
-						<button class="btn btn-block btn-primary">Create</button>
+					<a href="/orgs/create/" style="text-decoration: none;">
+						<button class="btn btn-block btn-primary" disabled>Create</button>
 					</a>
 				</div>
 				<div class="col-md-3">
-					<a href="/orgs/join/">
-						<button class="btn btn-block btn-primary">Join</button>
+					<a href="/orgs/join/" style="text-decoration: none;">
+						<button class="btn btn-block btn-primary" disabled>Join</button>
 					</a>
 				</div>
 			</div>
 
 			{% for org in orgs %}
-				<div class="jumbotron" style="text-align: left; width: 480px; padding-bottom: 0; padding-left: 16px; padding-top: 32px">
-					<div class="row" style="padding-left: 16px;">
-						<div class="col-md-10">
-							<div class="row">
-								<p class="h1">{{ org.name }}</p>
-							</div>
-							<div class="row">
-								<p class="lead">{{ org.description }}</p>
-							</div>
-						</div>
-{#						<div class="col-md-2">#}
-{#							<a href="/orgs/{{ org.id }}">#}
-{#								<i class="fas fa-angle-right fa-4x"></i>#}
-{#								<i class="fas fa-angle-right fa-4x"></i>#}
-{#							</a>#}
-{#						</div>#}
-					</div>
-					<div class="row">
-						<div class="btn-group" role="group" aria-label="Organization Links">
-							<a class="btn btn-secondary" style="width: 160px;" disabled>Chats</a>
-							<a class="btn btn-success" style="width: 160px;" href="/orgs/{{ org.id }}/logs">Logs</a>
-							<a class="btn btn-primary"   style="width: 160px;" href="/orgs/{{ org.id }}">Info</a>
-						</div>
-					</div>
-				</div>
+				{% include 'orgs/org_fragment.html' %}
 			{% endfor %}
 
 		</div>

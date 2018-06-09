@@ -39,10 +39,11 @@ class Log(models.Model):
 
 class Entry(models.Model):
 	objects = models.Manager()
-	participants = models.ForeignKey(
+	residents = models.ManyToManyField(
 		Resident,
 		null=True,
-		related_name='participants'
+		related_name='residents',
+
 	)
 	logger = models.ForeignKey(
 		User,
@@ -50,7 +51,7 @@ class Entry(models.Model):
 		related_name='logger'
 	)
 	message = models.CharField(max_length=1000)
-	tags = models.ForeignKey(
+	tags = models.ManyToManyField(
 		Tag,
 		null=True,
 		related_name='tags'
@@ -60,3 +61,4 @@ class Entry(models.Model):
 		null=True,
 		related_name='log',
 	)
+	timestamp = models.DateTimeField(null=True)

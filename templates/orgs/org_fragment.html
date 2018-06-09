@@ -1,0 +1,19 @@
+<div class="jumbotron" style="text-align: left; width: 480px; padding-bottom: 0; padding-left: 16px; padding-top: 32px">
+	<div class="row" style="padding-left: 16px;">
+		<div class="col-md-10">
+			<div class="row">
+				<p class="h1">{{ org.name }}</p>
+			</div>
+			<div class="row">
+				<p class="lead">{{ org.description }}</p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="btn-group" role="group" aria-label="Organization Links">
+			<a class="btn btn-secondary" style="width: 160px;" disabled>Chats</a>
+			<a class="btn btn-success" style="width: 160px;" href="/orgs/{{ org.id }}/logs">Logs</a>
+			<a class="btn btn-primary"   style="width: 160px;" href="/orgs/{{ org.id }}">Info</a>
+		</div>
+	</div>
+</div>
