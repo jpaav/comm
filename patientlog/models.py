@@ -41,7 +41,6 @@ class Entry(models.Model):
 	objects = models.Manager()
 	residents = models.ManyToManyField(
 		Resident,
-		null=True,
 		related_name='residents',
 
 	)
@@ -53,7 +52,6 @@ class Entry(models.Model):
 	message = models.CharField(max_length=1000)
 	tags = models.ManyToManyField(
 		Tag,
-		null=True,
 		related_name='tags'
 	)
 	log = models.ForeignKey(

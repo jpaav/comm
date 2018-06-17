@@ -22,19 +22,18 @@ def home(request):
 
 # The profile page for the current user
 def profile(request):
-	if request.user.is_authenticated():
-		return render(request, "accounts/profile.html", {'user': request.user, 'this_user': True})
-	else:
-		return redirect('/login')
+	if not request.user.is_authenticated():
+		return redirect('/login/')
+	user_orgs = Org.objects.filter(members=request.user)
+	return render(request, "accounts/profile.html", {'user': request.user, 'this_user': True, 'orgs': user_orgs})
 
 
 def other_profile(request, user_id):
 	user = User.objects.get(id=user_id)
-	if (user != request.user):
+	if user != request.user:
 		profile = Profile.objects.get(user=user)
 		return render(request, 'accounts/profile.html',
-		              {'user': user, 'profile': profile, 'feed_entries': feed_entries, 'this_user': False,
-		               'groups': groups})
+						{'user': user, 'profile': profile, 'this_user': False})
 	else:
 		return redirect('/accounts/profile')
 
@@ -48,10 +47,6 @@ def edit_profile(request):
 			profile.bio = form.save(commit=False)
 			profile.save()
 			form2.save()
-
-			alert = Alert(user=request.user, text="Profile updated", color=Alert.getYellow())
-			alert.saveIP(request)
-
 			return redirect('/accounts/profile/')
 	form = EditProfileForm(initial={'bio': profile.bio})
 	form2 = EditUserForm(instance=request.user)

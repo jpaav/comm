@@ -14,27 +14,39 @@
 							<a class="btn btn-secondary" href="/orgs/{{ log.org.id }}/">
 								<i class="far fa-building"></i>
 							</a>
-							<button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="fas fa-filter"></i>
+							<button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle text-capitalize" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								{{ sort }}
 							</button>
 							<div class="dropdown-menu" aria-labelledby="btnGroupDrop">
-								<a class="dropdown-item" href="?filter=newest">Newest</a>
-								<a class="dropdown-item" href="?filter=oldest">Oldest</a>
+								<a class="dropdown-item" href="?sort=newest&offset={{ offset }}">Newest</a>
+								<a class="dropdown-item" href="?sort=oldest&offset={{ offset }}">Oldest</a>
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						{# This if statement checks if there are no entries to show a friendly message #}
-						{% if entries.all|length == 0 %}
-							<p class="lead" style="margin-top: 20vh;">No Entries yet... Hit the button above to write the first one!</p>
+						{% if entries.count == 0 %}
+							<p class="lead px-5" style="margin-top: 20vh; text-align: center">No Entries yet... Hit the
+								<i class="fas fa-edit"></i>
+								button above to write the first one!</p>
+						{# Show the navigation fragment if there are some entries #}
+						{% else %}
+							{% include 'patientlogs/entry_nav_fragment.html' %}
 						{% endif %}
 						{# This for loop renders an entry card for each entry in the log #}
 						{% for entry in entries %}
 							{% include 'patientlogs/entry_fragment.html' %}
 						{% endfor %}
+						{% if entries.count > 10 %}
+							{% include 'patientlogs/entry_nav_fragment.html' %}
+						{% endif %}
+
 					</div>
 				</div>
 				<div class="col-md-7 expanded-entry" align="left">
+					{% if not detail and not entries.all|length == 0 %}
+							<p class="lead text-center" style="margin-top: 20vh;">Use the arrows to see the details of the entries here.</p>
+					{% endif %}
 					{% include 'patientlogs/entry_detail.html' %}
 				</div>
 			</div>

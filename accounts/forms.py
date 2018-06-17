@@ -14,7 +14,7 @@ class EditProfileForm(forms.Form):
         self.profile = kwargs.pop('profile', None)
         super(EditProfileForm, self).__init__(*args, **kwargs)
 
-    bio = forms.CharField(label='Bio', max_length=360, widget=forms.Textarea(
+    bio = forms.CharField(label='Bio', max_length=360, required=False, widget=forms.Textarea(
         attrs={
             'type': 'text',
             'class': 'form-control',
@@ -32,22 +32,22 @@ class EditProfileForm(forms.Form):
 
 class EditUserForm(UserChangeForm):
     template_name = '/accounts/editProfile'
-    first_name = forms.CharField(label='First Name', max_length=150, widget=forms.TextInput(
+    first_name = forms.CharField(label='First Name', max_length=150, required=False, widget=forms.TextInput(
         attrs={'type': 'text',
                'class': 'form-control'}))
-    last_name = forms.CharField(label='Last Name', max_length=150, widget=forms.TextInput(
+    last_name = forms.CharField(label='Last Name', max_length=150, required=False, widget=forms.TextInput(
         attrs={'type': 'text',
                'class': 'form-control'}))
-    username = forms.CharField(label='Username', min_length=4, max_length=150, widget=forms.TextInput(
+    username = forms.CharField(label='Username', min_length=4, required=False, max_length=150, widget=forms.TextInput(
         attrs={'type': 'text',
                'class': 'form-control'}))
-    email = forms.EmailField(label='Email', max_length=200, widget=forms.EmailInput(
-        attrs={'type': 'text',
-               'class': 'form-control'}))
+    # email = forms.EmailField(label='Email', max_length=200, required=False, widget=forms.EmailInput(
+    #     attrs={'type': 'text',
+    #            'class': 'form-control'}))
     class Meta:
         model = User
         fields = (
-            'email',
+            # 'email',
             'first_name',
             'last_name',
             'username',

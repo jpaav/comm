@@ -12,18 +12,42 @@
 					</a>
 				</div>
 				<div class="col-md-3">
-					<a href="/orgs/join/" style="text-decoration: none;">
-						<button class="btn btn-block btn-primary" disabled>Join</button>
+					<a style="text-decoration: none;">
+						<button class="btn btn-block btn-primary" data-toggle="modal" data-target="#joinOrgModal">Join</button>
 					</a>
 				</div>
 			</div>
-
 			{% for org in orgs %}
 				{% include 'orgs/org_fragment.html' %}
 			{% endfor %}
-
 		</div>
-
 	</div>
+	<div id="joinOrgModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">One Time Join Link</h4>
+					<button type="button" class="close" data-dismiss="modal">
+						<i class="fas fa-times"></i>
+					</button>
+				</div>
+				<div class="modal-body">
+					<input type="text" id="joinPasteBox">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="joinSubmit">Join</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$('#joinSubmit').click(
+		    function{
+		        location.href = $('#joinPasteBox').value;
+		    }
+		);
+
+	</script>
 {% endblock %}

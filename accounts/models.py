@@ -18,8 +18,8 @@ class Profile(models.Model):
 	# The user variable to allow authentication to work
 	username = models.CharField(max_length=200, default="")
 	bio = models.CharField(max_length=1000, default="")
-	hours = models.IntegerField(default=0)
 	permission = {}  # the key is the permission itself which can be a url or just a word for the permission the value is a list of orgainizations it can do this action for
+	# TODO: remove the below var orgs it seems unnecessary.
 	orgs = models.ForeignKey(
 		Org,
 		models.CASCADE,

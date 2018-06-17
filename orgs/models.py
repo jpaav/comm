@@ -13,9 +13,10 @@ class Org(models.Model):
 		related_name='owner',
 	)
 	# TODO Check if this should be "CASCADE"
-	members = models.ForeignKey(
+	members = models.ManyToManyField(
 		User,
-		on_delete=models.CASCADE,
-		null=True,
 		related_name='members',
+	)
+	unapproved = models.ManyToManyField(
+		User,
 	)
