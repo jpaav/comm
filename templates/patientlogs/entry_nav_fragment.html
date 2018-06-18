@@ -1,6 +1,5 @@
-<div class="row w-100">
-	<div class="col-md-2"></div>
-	<div class="col-md-1">
+<div class="w-100" style="text-align: center; vertical-align: center;">
+	<span>
 		{% if offset > 0 %}
 			<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset=0">
 				<i class="fas fa-angle-double-left"></i>
@@ -10,8 +9,8 @@
 				<i class="fas fa-angle-double-left"></i>
 			</a>
 		{% endif %}
-	</div>
-	<div class="col-md-1">
+	</span>
+	<span>
 		{% if offset > 0 %}
 			<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset={{ offset|add:"-100" }}">
 				<i class="fas fa-angle-left"></i>
@@ -21,19 +20,18 @@
 				<i class="fas fa-angle-left"></i>
 			</a>
 		{% endif %}
-	</div>
-	<div class="col-md-3 small text-center p-1">
+	</span>
+	<span>
 		{{ offset }}-{{ offset|add:entries.count }}
-	</div>
-	<div class="col-md-1">
+	</span>
+	<span>
 		<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset={{ offset|add:"100" }}">
 			<i class="fas fa-angle-right"></i>
 		</a>
-	</div>
-	<div class="col-md-1">
+	</span>
+	<span>
 		<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset=-1">
 			<i class="fas fa-angle-double-right"></i>
 		</a>
-	</div>
-	<div class="col-md-2"></div>
+	</span>
 </div>
