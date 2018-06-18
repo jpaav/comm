@@ -144,7 +144,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-LOGIN_REDIRECT_URL = '/home/'
+LOGIN_REDIRECT_URL = '/orgs/dash/'
 
 EMAIL_HOST_USER = 'comm.messages@gmail.com'  # this is a testing account
 EMAIL_USE_TLS = True
