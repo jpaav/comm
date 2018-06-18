@@ -120,3 +120,75 @@ def approve(request, org_id, user_id):
 			return HttpResponse('This member is not unapproved.')
 	else:
 		return HttpResponse('You are not the owner of this org and cannot approve members.')
+
+
+def residents_detail(request, org_id, res_id):
+	if not request.user.is_authenticated():
+		return redirect('/login/')
+	org = Org.objects.get(pk=org_id)
+	if not request.user == org.owner:
+		return render(request, 'accounts/not_authorized.html')
+	try:
+		detail = Resident.objects.get(pk=res_id)
+	except Resident.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'resident'})
+	residents = Resident.objects.filter(org=org)
+	if request.method == 'GET':
+		form = CreateResidentForm()
+	else:
+		form = CreateResidentForm(request.POST)
+		if form.is_valid():
+			resident = form.save(commit=False)
+			resident.org = org
+			resident.save()
+	return render(request, 'orgs/residents.html', {'form': form, 'residents': residents, 'detail': detail})
+
+
+def residents_delete(request, org_id, res_id):
+	if not request.user.is_authenticated():
+		return redirect('/login/')
+	org = Org.objects.get(pk=org_id)
+	if not request.user == org.owner:
+		return render(request, 'accounts/not_authorized.html')
+	try:
+		resident = Resident.objects.get(pk=res_id)
+		resident.delete()
+	except Resident.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'resident'})
+	return redirect('/orgs/' + str(org_id) + '/residents/')
+
+
+def tags_delete(request, org_id, tag_id):
+	if not request.user.is_authenticated():
+		return redirect('/login/')
+	org = Org.objects.get(pk=org_id)
+	if not request.user == org.owner:
+		return render(request, 'accounts/not_authorized.html')
+	try:
+		tag = Tag.objects.get(pk=tag_id)
+		tag.delete()
+	except Tag.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'tag'})
+	return redirect('/orgs/' + str(org_id) + '/tags/')
+
+
+def tags_detail(request, org_id, tag_id):
+	if not request.user.is_authenticated():
+		return redirect('/login/')
+	org = Org.objects.get(pk=org_id)
+	if not request.user == org.owner:
+		return render(request, 'accounts/not_authorized.html')
+	try:
+		detail = Tag.objects.get(pk=tag_id)
+	except Tag.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'resident'})
+	tags = Tag.objects.filter(org=org)
+	if request.method == 'GET':
+		form = CreateTagForm()
+	else:
+		form = CreateTagForm(request.POST)
+		if form.is_valid():
+			tag = form.save(commit=False)
+			tag.org = org
+			tag.save()
+	return render(request, 'orgs/tags.html', {'form': form, 'tags': tags, 'detail': detail})

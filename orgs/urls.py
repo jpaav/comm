@@ -6,7 +6,11 @@ from orgs import views
 urlpatterns = [
 	url(r'^(?P<org_id>[0-9]+)/logs/$', views.logs, name='org_logs'),
 	url(r'^(?P<org_id>[0-9]+)/tags/$', views.tags, name='org_tags'),
+	url(r'^(?P<org_id>[0-9]+)/tags/(?P<tag_id>[0-9]+)/$', views.tags_detail, name='org_tags_detail'),
+	url(r'^(?P<org_id>[0-9]+)/tags/(?P<tag_id>[0-9]+)/delete/$', views.tags_delete, name='org_tags_detail_delete'),
 	url(r'^(?P<org_id>[0-9]+)/residents/$', views.residents, name='org_residents'),
+	url(r'^(?P<org_id>[0-9]+)/residents/(?P<res_id>[0-9]+)/$', views.residents_detail, name='org_residents_detail'),
+	url(r'^(?P<org_id>[0-9]+)/residents/(?P<res_id>[0-9]+)/delete/$', views.residents_delete, name='org_residents_delete'),
 	url(r'^(?P<org_id>[0-9]+)/$', views.org, name='org'),
 	url(r'^$', RedirectView.as_view(url='/orgs/dash'), name='orgs'),
 	url(r'^dash/$', views.org_dash, name='dash'),
