@@ -1,4 +1,4 @@
-import six
+from django.utils import six
 from django import template
 from django.template.base import Node
 from django.utils.functional import allow_lazy

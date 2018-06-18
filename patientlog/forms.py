@@ -7,9 +7,11 @@ class SelectResidentsField(forms.ModelMultipleChoiceField):
 	def label_from_instance(self, obj):
 		return "%s" % obj.name
 
+
 class SelectTagsField(forms.ModelMultipleChoiceField):
 	def label_from_instance(self, obj):
 		return "%s" % obj.title
+
 
 class CreateEntryForm(forms.Form):
 	log = Log()
