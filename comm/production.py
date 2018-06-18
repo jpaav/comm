@@ -22,28 +22,31 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['S_KEY']
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # Set DEBUG = False to test 404 and 500 pages
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]'] use this when debug=False
-ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['.herokuapp.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'crispy_forms',
-    'gunicorn',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'accounts',
+	'crispy_forms',
+	'gunicorn',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
+	'accounts',
+	'rooms',
+	'orgs',
+	'patientlog',
 ]
 
 
@@ -63,7 +66,7 @@ ROOT_URLCONF = 'comm.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['resources/templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,7 +81,7 @@ TEMPLATES = [
 
 TEMPLATES[0]['OPTIONS']['context_processors'].append("alerts.context_processors.getAlerts")
 
-WSGI_APPLICATION = 'sapphire.wsgi.application'
+WSGI_APPLICATION = 'comm.wsgi.application'
 
 
 # Database
@@ -153,9 +156,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 LOGIN_REDIRECT_URL = '/home/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_USER = 'sapphireappstaff@gmail.com' #this is a testing account
+EMAIL_HOST_USER = 'comm.messages@gmail.com'  # this is a testing account
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
+# EMAIL_HOST_PASSWORD = 'asdf'
 EMAIL_PORT = 587
