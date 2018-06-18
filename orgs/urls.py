@@ -14,7 +14,8 @@ urlpatterns = [
 	url(r'^(?P<org_id>[0-9]+)/$', views.org, name='org'),
 	url(r'^$', RedirectView.as_view(url='/orgs/dash'), name='orgs'),
 	url(r'^dash/$', views.org_dash, name='dash'),
-	url(r'^create/$', views.create_org, name='create_org'),
+	# Disabled org creation for the time being
+	# url(r'^create/$', views.create_org, name='create_org'),
 	url(r'^join/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.join, name='join'),
 	url(r'^(?P<org_id>[0-9]+)/approve/(?P<user_id>[0-9]+)/$', views.approve, name='approve'),
 

@@ -21,6 +21,9 @@ def log(request, log_id):
 		log = Log.objects.get(pk=log_id)
 	except ObjectDoesNotExist:
 		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'log'})
+	# Make sure the user is a member and can view this log
+	if request.user not in log.org.members.all():
+		return render(request, 'accounts/not_authorized.html')
 	# Get variables from URL that alter view
 	# Second argument is default value
 	sort = request.GET.get('sort', 'newest')
@@ -59,6 +62,9 @@ def log_detail(request, log_id, entry_id):
 		log = Log.objects.get(pk=log_id)
 	except ObjectDoesNotExist:
 		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'log'})
+	# Make sure the user is a member and can view this log
+	if request.user not in log.org.members.all():
+		return render(request, 'accounts/not_authorized.html')
 	# Get variables from URL that alter view
 	# Second argument is default value
 	sort = request.GET.get('sort', 'newest')
@@ -99,7 +105,14 @@ def log_detail(request, log_id, entry_id):
 def new_entry(request, log_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
-	log = Log.objects.get(pk=log_id)
+	try:
+		log = Log.objects.get(pk=log_id)
+	except ObjectDoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'log'})
+	# Make sure the user is a member and can view this log
+	if request.user not in log.org.members.all():
+		return render(request, 'accounts/not_authorized.html')
+	# Render the form if GET otherwise save the info from POST
 	if request.method == 'GET':
 		form = CreateEntryForm(log=log)
 	else:

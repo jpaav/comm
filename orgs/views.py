@@ -14,7 +14,12 @@ from patientlog.models import Log, Tag, Resident
 def org(request, org_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
-	org = Org.objects.get(pk=org_id)
+	try:
+		org = Org.objects.get(pk=org_id)
+	except Org.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'org'})
+	if request.user not in org.members.all():
+		return render(request, 'accounts/not_authorized.html')
 	if request.user == org.owner:
 		uid = urlsafe_base64_encode(force_bytes(org.pk))
 		token = join_org_token.make_token(org)
@@ -48,7 +53,13 @@ def org_dash(request):
 def logs(request, org_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
-	logs = Log.objects.filter(org=Org.objects.filter(pk=org_id))
+	try:
+		org = Org.objects.get(pk=org_id)
+	except Org.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'org'})
+	if request.user not in org.members.all():
+		return render(request, 'accounts/not_authorized.html')
+	logs = Log.objects.filter(org=org)
 	return render(request, 'orgs/logs.html', {'logs': logs})
 
 
@@ -115,11 +126,9 @@ def approve(request, org_id, user_id):
 		if org.unapproved.get(pk=user_id) is not None:
 			org.unapproved.remove(user)
 			org.members.add(user)
-			return redirect('/orgs/' + str(org_id))
-		else:
-			return HttpResponse('This member is not unapproved.')
+		return redirect('/orgs/' + str(org_id))
 	else:
-		return HttpResponse('You are not the owner of this org and cannot approve members.')
+		return render(request, 'accounts/not_authorized.html')
 
 
 def residents_detail(request, org_id, res_id):
