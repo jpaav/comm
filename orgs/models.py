@@ -5,8 +5,8 @@ from django.db import models
 class Org(models.Model):
 	objects = models.Manager()
 	name = models.CharField(max_length=50, null=True)
-	description = models.CharField(max_length=1000, null=True)
-	location = models.CharField(max_length=100, null=True)
+	description = models.CharField(max_length=1000, null=True, blank=True)
+	location = models.CharField(max_length=100, null=True, blank=True)
 	owner = models.ForeignKey(
 		User,
 		null=True,
@@ -16,7 +16,10 @@ class Org(models.Model):
 	members = models.ManyToManyField(
 		User,
 		related_name='members',
+		blank=True
 	)
 	unapproved = models.ManyToManyField(
 		User,
+		related_name='unapproved',
+		blank=True
 	)

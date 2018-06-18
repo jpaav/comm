@@ -14,16 +14,17 @@ class Profile(models.Model):
 	objects = models.Manager()
 	# The primary key
 	# uid = models.IntegerField(primary_key=True)
-	timezone = models.CharField(max_length=50, default='EST')
+	timezone = models.CharField(max_length=50, default='EST', blank=True)
 	# The user variable to allow authentication to work
 	username = models.CharField(max_length=200, default="")
-	bio = models.CharField(max_length=1000, default="")
+	bio = models.CharField(max_length=1000, default="", blank=True)
 	permission = {}  # the key is the permission itself which can be a url or just a word for the permission the value is a list of orgainizations it can do this action for
 	# TODO: remove the below var orgs it seems unnecessary.
 	orgs = models.ForeignKey(
 		Org,
 		models.CASCADE,
-		null=True
+		null=True,
+		blank=True
 	)
 
 	# add permission to the profile for the PERM and the ORG

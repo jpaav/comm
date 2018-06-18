@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -33,8 +35,8 @@ class Log(models.Model):
 		related_name='log_org',
 	)
 	name = models.CharField(max_length=50, null=True)
-	description = models.CharField(max_length=1000, null=True)
-	location = models.CharField(max_length=100, null=True)
+	description = models.CharField(max_length=1000, null=True, blank=True)
+	location = models.CharField(max_length=100, null=True, blank=True)
 
 
 class Entry(models.Model):
@@ -42,21 +44,23 @@ class Entry(models.Model):
 	residents = models.ManyToManyField(
 		Resident,
 		related_name='residents',
-
+		blank=True
 	)
 	logger = models.ForeignKey(
 		User,
 		null=True,
-		related_name='logger'
+		related_name='logger',
+		blank=True
 	)
-	message = models.CharField(max_length=1000)
+	message = models.CharField(max_length=1000, blank=True)
 	tags = models.ManyToManyField(
 		Tag,
-		related_name='tags'
+		related_name='tags',
+		blank=True
 	)
 	log = models.ForeignKey(
 		Log,
 		null=True,
 		related_name='log',
 	)
-	timestamp = models.DateTimeField(null=True)
+	timestamp = models.DateTimeField(null=True, default=datetime.now, blank=True)
