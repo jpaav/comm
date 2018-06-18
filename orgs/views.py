@@ -56,6 +56,8 @@ def tags(request, org_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
 	org = Org.objects.get(pk=org_id)
+	if not request.user == org.owner:
+		return render(request, 'accounts/not_authorized.html')
 	tags = Tag.objects.filter(org=org)
 	if request.method == 'GET':
 		form = CreateTagForm()
@@ -72,6 +74,8 @@ def residents(request, org_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
 	org = Org.objects.get(pk=org_id)
+	if not request.user == org.owner:
+		return render(request, 'accounts/not_authorized.html')
 	residents = Resident.objects.filter(org=org)
 	if request.method == 'GET':
 		form = CreateResidentForm()
@@ -97,7 +101,7 @@ def join(request, uidb64, token):
 	if org is not None and join_org_token.check_token(org, token):
 		# Adds current user to org
 		org.unapproved.add(request.user)
-		return redirect('/orgs/dash/')
+		return render(request, 'orgs/join_confirmed.html', {'org_name': org.name})
 	else:
 		return HttpResponse('Activation link is invalid!')
 

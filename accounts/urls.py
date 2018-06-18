@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.profile, name='home'),
     url(r'^logout_lander/', views.logoutLander, name='logout_lander'),
     url(r'^profile/$', views.profile, name='profile'),
     url(r'^profile/(?P<user_id>[0-9]+)', views.other_profile, name="other_profile"),

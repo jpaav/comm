@@ -15,11 +15,6 @@ from .models import Profile
 from django.contrib.auth import update_session_auth_hash
 
 
-# Redirects to the profile page
-def home(request):
-	redirect('accounts/profile')
-
-
 # The profile page for the current user
 def profile(request):
 	if not request.user.is_authenticated():
@@ -28,17 +23,24 @@ def profile(request):
 	return render(request, "accounts/profile.html", {'user': request.user, 'this_user': True, 'orgs': user_orgs})
 
 
+# Currently disabled but ready to be implemented if wanted
 def other_profile(request, user_id):
+	return redirect('/accounts/profile/')
+	# noinspection PyUnreachableCode
+	if not request.user.is_authenticated():
+		return redirect('/login/')
 	user = User.objects.get(id=user_id)
 	if user != request.user:
 		profile = Profile.objects.get(user=user)
 		return render(request, 'accounts/profile.html',
 						{'user': user, 'profile': profile, 'this_user': False})
 	else:
-		return redirect('/accounts/profile')
+		return redirect('/accounts/profile/')
 
 
 def edit_profile(request):
+	if not request.user.is_authenticated():
+		return redirect('/login/')
 	profile = request.user.profile
 	if request.POST:
 		form = EditProfileForm(request.POST, profile=profile)
@@ -55,14 +57,14 @@ def edit_profile(request):
 
 
 def edit_password(request):
+	if not request.user.is_authenticated():
+		return redirect('/login/')
 	user = request.user
 	form = PasswordChangeForm(user=request.user, data=request.POST)
 	if request.POST:
 		if form.is_valid():
 			form.save()
 			update_session_auth_hash(request, user)
-			alert = Alert(user=request.user, text="Password updated", color=Alert.getYellow())
-			alert.saveIP(request)
 
 			return redirect('/accounts/profile')
 
@@ -72,12 +74,12 @@ def edit_password(request):
 # The signup page
 def signup(request):
 	# Checks if the user is sending their data (POST) or getting the form (GET)
-	if (request.method == 'POST'):
+	if request.method == 'POST':
 		form = SignupForm(request.POST)
 		# Makes sure the user filled out the form correctly as dictated by forms.py
 		if form.is_valid():
 			user = form.save(commit=False)
-			# Sets the user to deactive until they confirm email
+			# Sets the user to unactivated until they confirm email
 			user.is_active = False
 			# Saves the user to the server
 			user.save()
@@ -90,54 +92,16 @@ def signup(request):
 				'uid': urlsafe_base64_encode(force_bytes(user.pk)),
 				'token': account_activation_token.make_token(user),
 			})
-			mail_subject = 'Activate your Sapphire Account!'
+			mail_subject = 'Activate your Comm Account!'
 			to_email = form.cleaned_data.get('email')
 			email = EmailMultiAlternatives(mail_subject, message, to=[to_email])
 			email.content_subtype = 'html'
 			email.mixed_subtype = 'related'
-			fp = open('static/img/logos.ico/WithText.jpg', 'rb')
+			fp = open('static/img/test-user-icon.jpg', 'rb')
 			logo = MIMEImage(fp.read())
 			logo.add_header('Content-ID', '<logo>')
 			email.attach(logo)
 			email.send()
-
-			alert.saveIP(request)
-			return redirect('/login')
-		# return render(request, 'accounts/please_confirm.html')
-	else:
-		form = SignupForm()
-
-	return render(request, 'accounts/signup.html', {'form': form})
-
-
-def signup_foruser(request, group_id, user_slot_id):
-	# Checks if the user is sending their data (POST) or getting the form (GET)
-	if (request.method == 'POST'):
-		form = SignupForm(request.POST)
-		# Makes sure the user filled out the form correctly as dictated by forms.py
-		if form.is_valid():
-			user = form.save(commit=False)
-			# Sets the user to deactive until they confirm email
-			user.is_active = False
-			# Saves the user to the server
-			user.save()
-			# Gets the current domain in order to send the email
-			current_site = get_current_site(request)
-			# Sends the user an email based on the email template and the info passed in here
-			message = render_to_string('emails/activate_account.html', {
-				'user': user,
-				'domain': current_site.domain,
-				'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-				'token': account_activation_token.make_token(user),
-			})
-			mail_subject = 'Activate your Sapphire account (named by Armaan Goel).'
-			to_email = form.cleaned_data.get('email')
-			email = EmailMessage(mail_subject, message, to=[to_email])
-			email.send()
-
-			alert = Alert(user=request.user, text="Click on the link sent to your email to confirm your account",
-			              color=Alert.getYellow())
-			alert.saveIP(request)
 			return redirect('/login')
 		# return render(request, 'accounts/please_confirm.html')
 	else:
