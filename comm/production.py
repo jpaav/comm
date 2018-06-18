@@ -29,7 +29,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = False
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]'] use this when debug=False
-ALLOWED_HOSTS = ['.herokuapp.com']
+ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
