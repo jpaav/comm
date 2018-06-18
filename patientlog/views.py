@@ -45,10 +45,10 @@ def log(request, log_id):
 		return redirect('/logs/' + str(log_id) + '/?sort=' + str(sort) + '&offset=' + str(offset))
 	# Sorts by the newest timestamp in the entries
 	if sort == 'newest':
-		entries = Entry.objects.filter(log=log).order_by('-timestamp')[offset:100]
+		entries = Entry.objects.filter(log=log).order_by('-timestamp')[offset:offset+100]
 	# Sorts by the oldest timestamp in the entries
 	elif sort == 'oldest':
-		entries = Entry.objects.filter(log=log).order_by('timestamp')[offset:100]
+		entries = Entry.objects.filter(log=log).order_by('timestamp')[offset:offset+100]
 	# If the user supplies some bogus filter it will be caught here and changed to newest
 	else:
 		return redirect('/logs/' + str(log_id) + '/?sort=newest&offset=' + str(offset))
@@ -86,10 +86,10 @@ def log_detail(request, log_id, entry_id):
 		return redirect('/logs/' + str(log_id) + '/?sort=' + str(sort) + '&offset=' + str(offset))
 	# Sorts by the newest timestamp in the entries
 	if sort == 'newest':
-		entries = Entry.objects.filter(log=log).order_by('-timestamp')[offset:100]
+		entries = Entry.objects.filter(log=log).order_by('-timestamp')[offset:offset+100]
 	# Sorts by the oldest timestamp in the entries
 	elif sort == 'oldest':
-		entries = Entry.objects.filter(log=log).order_by('timestamp')[offset:100]
+		entries = Entry.objects.filter(log=log).order_by('timestamp')[offset:offset+100]
 	# If the user supplies some bogus filter it will be caught here and changed to newest
 	else:
 		return redirect('/logs/' + str(log_id) + '/?sort=newest&offset=' + str(offset))
