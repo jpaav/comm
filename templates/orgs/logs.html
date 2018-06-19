@@ -2,7 +2,7 @@
 {% block content %}
 	<div class="row">
 		<div class="col-md-2"></div>
-		<div class="col-md-8" style="text-align: left;">
+		<div class="col-md-4 col-sm-12" style="text-align: left;">
 			{% if logs.count == 0 %}
 				<h1 class="display-1" style="margin-bottom: 24px;">No logs.</h1>
 				<p class="lead">Create one through the
@@ -11,30 +11,7 @@
 				<h1 class="display-1" style="margin-bottom: 24px;">Logs</h1>
 			{% endif %}
 			{% for log in logs %}
-				<div class="jumbotron" style="text-align: left; width: 480px; padding-bottom: 0; padding-left: 16px; padding-top: 32px">
-					<div class="row" style="padding-left: 16px;">
-						<div class="col-md-10">
-							<div class="row">
-								<p class="h1">{{ log.name }}</p>
-							</div>
-							<div class="row">
-								<p class="lead">{{ log.description }}</p>
-							</div>
-						</div>
-						<div class="col-md-2">
-							<a href="/logs/{{ log.id }}">
-								<i class="fas fa-angle-right fa-4x"></i>
-							</a>
-						</div>
-					</div>
-{#					<div class="row">#}
-{#						<div class="btn-group" role="group" aria-label="Organization Links">#}
-{#							<a class="btn btn-secondary" style="width: 160px;" disabled>Chats</a>#}
-{#							<a class="btn btn-success" style="width: 160px;" href="/orgs/{{ org.id }}/logs">Logs</a>#}
-{#							<a class="btn btn-primary"   style="width: 160px;" href="/orgs/{{ org.id }}">Info</a>#}
-{#						</div>#}
-{#					</div>#}
-				</div>
+				{% include 'orgs/log_fragment.html' %}
 			{% endfor %}
 		</div>
 	</div>

@@ -2,21 +2,23 @@
 {% block content %}
 	<div class="row">
 		<div class="col-md-2"></div>
-		<div class="col-md-8" style="text-align: left;">
+		<div class="col-md-4 col-sm-12" style="text-align: left;">
 			<h1 class="display-1" style="margin-bottom: 24px;">Organizations</h1>
-
-			<div class="row" style="margin-bottom: 24px;">
-				<div class="col-md-3">
-					<a href="/orgs/create/" style="text-decoration: none;">
+			<div class="row">
+				<div class="col-md-4 col-sm-4" style="margin-bottom: 24px;">
+					<a style="text-decoration: none;">
 						<button class="btn btn-block btn-primary" disabled>Create</button>
 					</a>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-4 col-sm-4" style="margin-bottom: 24px;">
 					<a style="text-decoration: none;">
 						<button class="btn btn-block btn-primary" data-toggle="modal" data-target="#joinOrgModal">Join</button>
 					</a>
 				</div>
 			</div>
+			{% if orgs.count == 0 %}
+				<p class="lead">You are not part of any organizations currently.</p>
+			{% endif %}
 			{% for org in orgs %}
 				{% include 'orgs/org_fragment.html' %}
 			{% endfor %}
