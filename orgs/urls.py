@@ -18,5 +18,7 @@ urlpatterns = [
 	# url(r'^create/$', views.create_org, name='create_org'),
 	url(r'^join/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.join, name='join'),
 	url(r'^(?P<org_id>[0-9]+)/approve/(?P<user_id>[0-9]+)/$', views.approve, name='approve'),
+	url(r'^(?P<org_id>[0-9]+)/unapprove/(?P<user_id>[0-9]+)/$', views.unapprove, name='unapprove'),
+	url(r'^(?P<org_id>[0-9]+)/remove_unapproved/(?P<user_id>[0-9]+)/$', views.remove_unapproved, name='remove_unapproved'),
 
 ]

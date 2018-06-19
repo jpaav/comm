@@ -120,8 +120,14 @@ def join(request, uidb64, token):
 def approve(request, org_id, user_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
-	org = Org.objects.get(pk=org_id)
-	user = User.objects.get(pk=user_id)
+	try:
+		org = Org.objects.get(pk=org_id)
+	except Org.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'org'})
+	try:
+		user = User.objects.get(pk=user_id)
+	except User.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'user'})
 	if request.user == org.owner:
 		if org.unapproved.get(pk=user_id) is not None:
 			org.unapproved.remove(user)
@@ -201,3 +207,42 @@ def tags_detail(request, org_id, tag_id):
 			tag.org = org
 			tag.save()
 	return render(request, 'orgs/tags.html', {'form': form, 'tags': tags, 'detail': detail})
+
+
+def unapprove(request, org_id, user_id):
+	if not request.user.is_authenticated():
+		return redirect('/login/')
+	try:
+		org = Org.objects.get(pk=org_id)
+	except Org.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'org'})
+	try:
+		user = User.objects.get(pk=user_id)
+	except User.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'user'})
+	if request.user == org.owner:
+		if org.members.get(pk=user_id) is not None:
+			org.members.remove(user)
+			org.unapproved.add(user)
+		return redirect('/orgs/' + str(org_id))
+	else:
+		return render(request, 'accounts/not_authorized.html')
+
+
+def remove_unapproved(request, org_id, user_id):
+	if not request.user.is_authenticated():
+		return redirect('/login/')
+	try:
+		org = Org.objects.get(pk=org_id)
+	except Org.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'org'})
+	try:
+		user = User.objects.get(pk=user_id)
+	except User.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'user'})
+	if request.user == org.owner:
+		if org.unapproved.get(pk=user_id) is not None:
+			org.unapproved.remove(user)
+		return redirect('/orgs/' + str(org_id))
+	else:
+		return render(request, 'accounts/not_authorized.html')

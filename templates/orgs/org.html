@@ -29,6 +29,69 @@
 					<p class="text-danger mb-0">Map requires a valid address to work</p>
 				</div>
 			</div>
+			<h3 class="text-center display-4">Members</h3>
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<tbody>
+						{% for u in org.unapproved.all %}
+							<tr>
+								<td>
+									{{ u.get_full_name }} ({{ u.email|default:"N/A" }})
+								</td>
+								<td>
+									{% if request.user == org.owner %}
+										<a href="approve/{{ u.id }}/" style="text-decoration: none;">
+											<button class="btn btn-success btn-sm">
+												Approve
+											</button>
+										</a>
+										<a href="remove_unapproved/{{ u.id }}/" style="text-decoration: none;">
+											<button class="btn btn-danger btn-sm">
+												<i class="fas fa-trash-alt"></i>
+											</button>
+										</a>
+									{% else %}
+										<button class="btn btn-danger btn-sm">
+											Unapproved
+										</button>
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+						{% for member in org.members.all %}
+							<tr>
+								<td>
+									{{ member.get_full_name }} ({{ member.email|default:"N/A" }})
+								</td>
+								<td class="text-right">
+									{% if member == org.owner %}
+										<button class="btn btn-warning btn-sm">
+											Owner
+										</button>
+									{% endif %}
+									{% if request.user == member %}
+										<button class="btn btn-primary btn-sm">
+											You
+										</button>
+									{% endif %}
+									{% if request.user == org.owner and not request.user == member %}
+										<a href="unapprove/{{ member.id }}/" style="text-decoration: none;">
+											<button class="btn btn-danger btn-sm">
+												Unapprove
+											</button>
+										</a>
+									{% else %}
+										<button class="btn btn-success btn-sm">
+											Approved
+										</button>
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+
+				</table>
+			</div>
 		</div>
 		<div class="col-md-3" align="left">
 			{% if token %}
@@ -61,38 +124,6 @@
 					<i class="fas fa-angle-right"></i>
 				</button>
 			</a>
-			<h5 class="text-center">Members</h5>
-			<div class="table-responsive">
-				<table class="table table-hover">
-					<tbody>
-						{% for u in org.unapproved.all %}
-							<tr>
-								<td>
-									{{ u.get_full_name }}
-								</td>
-								<td>
-									<a href="approve/{{ u.id }}">
-										<button class="btn btn-primary btn-sm">
-											Approve
-										</button>
-									</a>
-
-								</td>
-							</tr>
-						{% endfor %}
-						{% for member in org.members.all %}
-							<tr>
-								<td>
-									{{ member.get_full_name }}
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-
-				</table>
-			</div>
-
-
 		</div>
 	</div>
 	{% if token %}
