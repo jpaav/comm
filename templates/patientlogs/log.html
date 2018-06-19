@@ -35,20 +35,23 @@
 							{% include 'patientlogs/entry_nav_fragment.html' %}
 						</div>
 					{% endif %}
-					<div class="row pr-3" style="height: 50vh; overflow-y: scroll; overflow-x: hidden;">
-						{# This if statement checks if there are no entries to show a friendly message #}
-						{% if entries.count == 0 %}
-							<p class="lead px-5" style="margin-top: 20vh; text-align: center">No Entries yet... Hit the
-								<i class="fas fa-edit"></i>
-								button above to write the first one!</p>
-						{% endif %}
-						{# This for loop renders an entry card for each entry in the log #}
-						{% for entry in entries %}
-							{% include 'patientlogs/entry_fragment.html' %}
-						{% endfor %}
+					<div class="row px-3 pt-2 shadow rounded-corners" style="height: 50vh; width: inherit;">
+						<div class="blue-scrollbar pr-2" style="overflow-y: scroll; overflow-x: hidden;">
+							{# This if statement checks if there are no entries to show a friendly message #}
+							{% if entries.count == 0 %}
+								<p class="lead px-5" style="margin-top: 20vh; text-align: center">No Entries yet... Hit the
+									<i class="fas fa-edit"></i>
+									button above to write the first one!</p>
+							{% endif %}
+							{# This for loop renders an entry card for each entry in the log #}
+							{% for entry in entries %}
+								{% include 'patientlogs/entry_fragment.html' %}
+							{% endfor %}
+						</div>
 					</div>
 				</div>
 				<div class="col-lg-7" align="left">
+					{% include 'patientlogs/filter_display_fragment.html' %}
 					{% include 'patientlogs/filter_fragment.html' %}
 					{% if not detail and not entries.all|length == 0 %}
 							<p class="lead text-center" style="margin-top: 20vh;">Use the arrows to see the details of the entries here.</p>

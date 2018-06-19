@@ -1,3 +1,62 @@
 /*
 Color Palette
 http://www.paletton.com/#uid=10u0u0kzvxohrLloMCn-VmYJ2e2*/
+
+.shadow {
+  -moz-box-shadow:    3px 3px 5px 6px #ccc;
+  -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+  box-shadow:         3px 3px 5px 6px #ccc;
+}
+
+.shadow-inset {
+	-moz-box-shadow:    inset 0 0 10px #000000;
+	-webkit-box-shadow: inset 0 0 10px #000000;
+	box-shadow:         inset 0 0 10px #000000;
+}
+
+.rounded-corners {
+	border-radius: 15px;
+}
+
+.thin-scrollbar::-webkit-scrollbar {
+	width: 10px;
+	background-color: #F5F5F5;
+	height: 10px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+	border-radius: 10px;
+	background: rgba(0,0,0,0.1);
+	border: 1px solid #ccc;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background: linear-gradient(left, #fff, #e4e4e4);
+	border: 1px solid #aaa;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb:hover {
+	/*background: #fff;*/
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb:active {
+	background: linear-gradient(left, #22ADD4, #1E98BA);
+}
+
+.blue-scrollbar::-webkit-scrollbar {
+	width: 8px;
+	background-color: #F5F5F5;
+}
+
+
+.blue-scrollbar::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+	border-radius: 10px;
+}
+
+.blue-scrollbar::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: #7a99d9;
+}

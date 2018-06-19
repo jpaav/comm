@@ -1,0 +1,33 @@
+{% if tagfilter or loggerfilter or resfilter %}
+	{% load name_from_id %}
+	<p class="small">
+		<i class="fas fa-filter"></i>
+		{% if tagfilter %}
+			<button class="btn btn-sm">
+				Tags: {{ tagfilter|tag_name_from_id }}
+				<a href="?sort={{ sort }}&offset={{ offset }}&tagfilter=&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}">
+					<i class="fas fa-times-circle" style="color: red;"></i>
+				</a>
+			</button>
+		{% endif %}
+		{% if resfilter %}
+			<button class="btn btn-sm">
+				Residents: {{ resfilter|resident_name_from_id }}
+				<a href="?sort={{ sort }}&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter=&loggerfilter={{ loggerfilter }}">
+					<i class="fas fa-times-circle" style="color: red;"></i>
+				</a>
+			</button>
+		{% endif %}
+		{% if loggerfilter %}
+			<button class="btn btn-sm">
+				Loggers: {{ loggerfilter|logger_name_from_id }}
+				<a href="?sort={{ sort }}&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter=">
+					<i class="fas fa-times-circle" style="color: red;"></i>
+				</a>
+			</button>
+		{% endif %}
+		<a class="btn btn-danger btn-sm" href="?sort={{ sort }}&offset={{ offset }}&tagfilter=&resfilter=&loggerfilter=">
+			Clear all
+		</a>
+	</p>
+{% endif %}
