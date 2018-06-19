@@ -17,12 +17,15 @@
 							<a class="btn btn-warning" href="/orgs/{{ log.org.id }}/residents/">
 								<i class="fas fa-address-card"></i>
 							</a>
+							<a class="btn btn-default" data-toggle="collapse" href="#filterPanel" role="button" id="filterPanelToggle">
+								<i class="fas fa-filter"></i>
+							</a>
 							<button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle text-capitalize" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								{{ sort }}
 							</button>
 							<div class="dropdown-menu" aria-labelledby="btnGroupDrop">
-								<a class="dropdown-item" href="?sort=newest&offset={{ offset }}">Newest</a>
-								<a class="dropdown-item" href="?sort=oldest&offset={{ offset }}">Oldest</a>
+								<a class="dropdown-item" href="?sort=newest&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}">Newest</a>
+								<a class="dropdown-item" href="?sort=oldest&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}">Oldest</a>
 							</div>
 						</div>
 					</div>
@@ -46,6 +49,7 @@
 					</div>
 				</div>
 				<div class="col-lg-7" align="left">
+					{% include 'patientlogs/filter_fragment.html' %}
 					{% if not detail and not entries.all|length == 0 %}
 							<p class="lead text-center" style="margin-top: 20vh;">Use the arrows to see the details of the entries here.</p>
 					{% endif %}

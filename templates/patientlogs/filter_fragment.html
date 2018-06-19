@@ -1,0 +1,94 @@
+<div id="filterPanel" class="collapse">
+	<div class="jumbotron py-3">
+		<h1 class="display-4">Filters</h1>
+		<p class="small">Select the features you want to see.</p>
+		<p class="lead mt-2">Tags</p>
+		{% for tag in tags %}
+			<button class="btn btn-sm filter-tag-toggle" id="tag-{{ tag.id }}" style="background-color: #{{ tag.color }};">
+				{{ tag.title }}
+			</button>
+		{% endfor %}
+		<hr/>
+		<p class="lead mt-2">Residents</p>
+		{% for resident in residents %}
+			<button class="btn btn-sm filter-resident-toggle" id="resident-{{ resident.id }}">
+				{{ resident.name }}
+			</button>
+		{% endfor %}
+		<hr/>
+		<p class="lead mt-2">Loggers</p>
+		{% for member in log.org.members.all %}
+			<button class="btn btn-sm filter-logger-toggle" id="logger-{{ member.id }}">
+				{{ member.get_full_name }}
+			</button>
+		{% endfor %}
+		<hr/>
+		<div class="mt-4">
+			<button class="btn btn-success btn-block apply-filter">
+				Apply Filter
+			</button>
+		</div>
+	</div>
+</div>
+
+<script>
+	var tag_filter_string = "";
+	var resident_filter_string = "";
+	var logger_filter_string = "";
+	$('.filter-tag-toggle').click(
+	    function(e){
+			tag_filter_string = toggle_filter(e, tag_filter_string);
+	    }
+	);
+	$('.filter-resident-toggle').click(
+	    function(e){
+			resident_filter_string = toggle_filter(e, resident_filter_string);
+	    }
+	);
+	$('.filter-logger-toggle').click(
+	    function(e){
+			logger_filter_string = toggle_filter(e, logger_filter_string);
+	    }
+	);
+	function toggle_filter(e, string){
+	    $(e.target).html(function(e, html){
+			if (html.indexOf("<i class=\"far fa-check-circle\"></i>") === -1){
+			    console.log("add icon")
+			    return "<i class=\"far fa-check-circle\"></i>" + html;
+			}else{
+                console.log("remove icon")
+				return html.replace('<i class=\"far fa-check-circle\"></i>', '');
+			}
+	    });
+	    var new_id = e.target.id.split("-")[1];
+        var old_ids = string.split("_");
+        for (var i in old_ids){
+			if (new_id === old_ids[i]){
+			    string = string.replace("_" + old_ids[i], "");
+                console.log(string);
+			    return string;
+			}
+        }
+        {# Breaks the remover above #}
+        {#if(string !== ""){#}
+        {#    string += "_";}#}
+        string += "_" + new_id;
+	    console.log(string);
+	    return string;
+	}
+	$('.apply-filter').click(
+		function(e){
+		    {# Checks if there is a detail loaded. If there is none {{ detail }} will resolve to an empty string #}
+		    var hasDetail = "{{ detail }}";
+			if(hasDetail === "") {
+			    window.location.href = "/logs/{{ log.id }}/?sort={{ sort }}&offset={{ offset }}&tagfilter="
+			    + tag_filter_string + "&resfilter=" + resident_filter_string + "&loggerfilter=" + logger_filter_string;
+			}
+			else{
+			    window.location.href = "/logs/{{ log.id }}/entry/{{ detail.id }}/?sort={{ sort }}&offset={{ offset }}&"
+			    + tag_filter_string + "&" + resident_filter_string + "&" + logger_filter_string;
+			}
+
+		}
+	)
+</script>
