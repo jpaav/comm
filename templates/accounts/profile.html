@@ -2,48 +2,51 @@
 
 {% block content %}
 	<div class="row">
+		<div class="col-md-2"></div>
 		<div class="col-md-8">
-			<div style="padding-left: 48px;">
-				<div class="row">
+			<div class="row">
+				<div class="col-md-10 text-left">
 					<h1 class="display-2" > {{ user.first_name }} {{ user.last_name }}</h1>
 				</div>
-				<div class="row">
-					<p class="lead"> @{{ user.username }} </p>
+				<div class="col-md-2">
+					<a class="col-md-6" href="/accounts/profile/edit/">
+						<button type="button" class="btn btn-default"><i class="fas fa-user-edit fa-2x p-1"></i></button>
+					</a>
 				</div>
-				{% if this_user %}
-					<h1></h1>
-					<div class="row">
-						<a class="col-md-6" href="/logout">
-							<button type="button" class="btn btn-danger btn-block">Logout</button>
-						</a>
-						<a class="col-md-6" href="/accounts/profile/edit/">
-							<button type="button" class="btn btn-primary btn-block">Edit Profile</button>
-						</a>
-					</div>
-				{% endif %}
-			</div>
 
+			</div>
+			<div class="row">
+				<p class="lead">@{{ user.username }}</p>
+			</div>
+			{% if this_user %}
+				<div class="row">
+
+				</div>
+			{% endif %}
 			<p class="text-left">
 				{{ user.profile.bio }}
 			</p>
+{#			<h1 class="text-center display-4">Organizations</h1>#}
+{#			<div class="table-responsive">#}
+{#				<table class="table table-hover">#}
+{#					<thead>#}
+{#						<tr>#}
+{#							<th>Name</th>#}
+{#						</tr>#}
+{#					</thead>#}
+{#					<tbody>#}
+{#					{% for org in orgs %}#}
+{#						<tr>#}
+{#							<td><a href="/orgs/{{ org.id }}">{{ org.name }}</a></td>#}
+{#						</tr>#}
+{#					{% endfor %}#}
+{#					</tbody>#}
+{#				</table>#}
+{#			</div>#}
 		</div>
 		{% if this_user %}
 			<div class="col-md-2">
-				<h1 class="text-center">Organizations</h1>
-				<table class="table table-hover">
-					<thead>
-						<tr>
-							<th>Name</th>
-						</tr>
-					</thead>
-					<tbody>
-					{% for org in orgs %}
-						<tr>
-							<td><a href="/orgs/{{ org.id }}">{{ org.name }}</a></td>
-						</tr>
-					{% endfor %}
-					</tbody>
-				</table>
+
 			</div>
 		{% endif %}
 

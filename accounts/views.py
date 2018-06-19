@@ -102,8 +102,7 @@ def signup(request):
 			logo.add_header('Content-ID', '<logo>')
 			email.attach(logo)
 			email.send()
-			return redirect('/login')
-		# return render(request, 'accounts/please_confirm.html')
+			return render(request, 'accounts/please_confirm.html')
 	else:
 		form = SignupForm()
 
