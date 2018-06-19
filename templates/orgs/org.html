@@ -1,6 +1,7 @@
 {% extends 'header.html' %}
 {% block content %}
 	<div class="row">
+		{# Title description and map #}
 		<div class="col-md-1"></div>
 		<div class="col-md-8" align="left">
 			<h1 class="display-1">{{ org.name }}</h1>
@@ -29,6 +30,7 @@
 					<p class="text-danger mb-0">Map requires a valid address to work</p>
 				</div>
 			</div>
+			{# Member table #}
 			<h3 class="text-center display-4">Members</h3>
 			<div class="table-responsive">
 				<table class="table table-hover">
@@ -91,45 +93,45 @@
 				</table>
 			</div>
 		</div>
+		{# Right side toolbar (ie Tags manager, Residents manager, Join link generator, Logs page) #}
 		<div class="col-md-3" align="left">
 			{% if token %}
 				<a data-toggle="modal" data-target="#joinLinkModal">
 					<button class="btn btn-primary btn-lg btn-block"
 					        style="text-align: left; margin-bottom: 24px; padding-top: 24px; padding-bottom: 24px;">
 						Generate Join Link
-						<i class="fas fa-link"></i>
+						<i class="fas fa-link fa-2x float-right"></i>
 					</button>
 				</a>
 				<a href="/orgs/{{ org.id }}/tags/" style="text-decoration:none;">
 					<button class="btn btn-primary btn-lg btn-block"
 					        style="text-align: left; margin-bottom: 24px; padding-top: 24px; padding-bottom: 24px;">
 						Tags
-						<i class="fas fa-angle-right"></i>
-					</button>
-				</a>
-				<a href="/orgs/{{ org.id }}/residents" style="text-decoration:none;">
-					<button class="btn btn-primary btn-lg btn-block"
-					        style="text-align: left; margin-bottom: 24px; padding-top: 24px; padding-bottom: 24px;">
-						Residents
-						<i class="fas fa-angle-right"></i>
+						<i class="fas fa-tags fa-2x float-right"></i>
 					</button>
 				</a>
 			{% endif %}
+			<a href="/orgs/{{ org.id }}/residents" style="text-decoration:none;">
+				<button class="btn btn-primary btn-lg btn-block"
+				        style="text-align: left; margin-bottom: 24px; padding-top: 24px; padding-bottom: 24px;">
+					Residents
+					<i class="fas fa-address-card fa-2x float-right"></i>
+				</button>
+			</a>
 			<a href="/orgs/{{ org.id }}/logs/" style="text-decoration:none;">
 				<button class="btn btn-primary btn-lg btn-block"
 				        style="text-align: left; margin-bottom: 24px; padding-top: 24px; padding-bottom: 24px;">
 					Logs
-					<i class="fas fa-angle-right"></i>
+					<i class="fas fa-clipboard fa-2x float-right"></i>
 				</button>
 			</a>
 		</div>
 	</div>
 	{% if token %}
-
-		<!-- Modal to show link generation -->
+		{# Modal to show link generation #}
 		<div id="joinLinkModal" class="modal fade" role="dialog">
 			<div class="modal-dialog">
-				<!-- Modal content-->
+				{# Modal content #}
 				<div class="modal-content">
 					<div class="modal-header">
 						<h4 class="modal-title">One Time Join Link</h4>

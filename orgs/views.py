@@ -85,10 +85,13 @@ def tags(request, org_id):
 def residents(request, org_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
-	org = Org.objects.get(pk=org_id)
-	if not request.user == org.owner:
-		return render(request, 'accounts/not_authorized.html')
+	try:
+		org = Org.objects.get(pk=org_id)
+	except Org.DoesNotExist:
+		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'org'})
 	residents = Resident.objects.filter(org=org)
+	if request.user not in org.members.all():
+		return render(request, 'accounts/not_authorized.html')
 	if request.method == 'GET':
 		form = CreateResidentForm()
 	else:

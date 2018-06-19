@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django import forms
 
 from orgs.models import Org
@@ -60,11 +62,30 @@ class CreateResidentForm(forms.Form):
 		attrs={'type': 'text',
 			'class': 'form-control'}))
 
+	room = forms.CharField(required=False, widget=forms.TextInput(
+		attrs={'type': 'text',
+			'class': 'form-control'}))
+
+	timestamp_admitted = forms.DateTimeField(label='Last Admitted', initial=datetime.now(), required=False, input_formats=['%Y-%m-%dT%H:%M'], widget=forms.DateTimeInput(
+		attrs={'type': 'datetime-local',
+			'class': 'form-control'}))
+
+	timestamp_left = forms.DateTimeField(label='Last left', initial=datetime.now(), required=False, input_formats=['%Y-%m-%dT%H:%M'], widget=forms.DateTimeInput(
+		attrs={'type': 'datetime-local',
+			'class': 'form-control'}))
+
 	def clean_name(self):
 		name = self.cleaned_data['name']
 		return name
 
+	def clean_room(self):
+		room = self.cleaned_data['room']
+		return room
+
 	def save(self, commit=True):
 		return Resident(
-			name=self.cleaned_data['name']
+			name=self.cleaned_data['name'],
+			room=self.cleaned_data['room'],
+			timestamp_admitted=self.cleaned_data['timestamp_admitted'],
+			timestamp_left=self.cleaned_data['timestamp_left']
 		)
