@@ -46,8 +46,9 @@ def create_org(request):
 def org_dash(request):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
-	orgs = Org.objects.filter(members=request.user)
-	return render(request, 'orgs/org_dash.html', {'orgs': orgs})
+	approved_orgs = Org.objects.filter(members=request.user)
+	unapproved_orgs = Org.objects.filter(unapproved=request.user)
+	return render(request, 'orgs/org_dash.html', {'approved_orgs': approved_orgs, 'unapproved_orgs': unapproved_orgs})
 
 
 def logs(request, org_id):

@@ -1,6 +1,19 @@
-<div class="jumbotron" style="text-align: left; width: 100%; padding-bottom: 0; padding-left: 16px; padding-right: 16px; padding-top: 32px">
-	<div class="row" style="padding-left: 16px;">
-		<div class="col-md-10">
+<div class="jumbotron" style="text-align: left; width: 100%; padding-bottom: 0; padding-left: 16px; padding-right: 16px; padding-top: 0">
+	{% if not approved %}
+		<div class="row float-right pt-3 pr-3">
+			<button class="btn btn-danger btn-sm">
+					Unapproved
+			</button>
+		</div>
+	{% else %}
+		<div class="row float-right pt-3 pr-3">
+			<button class="btn btn-success btn-sm">
+					Approved
+			</button>
+		</div>
+	{% endif %}
+	<div class="row" style="padding-left: 16px; padding-top: 32px;">
+		<div class="col-lg-10">
 			<div class="row">
 				<p class="h1">{{ org.name }}</p>
 			</div>
@@ -8,12 +21,22 @@
 				<p class="lead">{{ org.description }}</p>
 			</div>
 		</div>
+
+
 	</div>
 	<div class="row">
-		<div class="btn-group" role="group" aria-label="Organization Links" style="width: 100%;">
-			<a class="btn btn-secondary" style="width: 100%;" disabled>Chats</a>
-			<a class="btn btn-success" style="width: 100%;" href="/orgs/{{ org.id }}/logs">Logs</a>
-			<a class="btn btn-primary"   style="width: 100%;" href="/orgs/{{ org.id }}">Info</a>
-		</div>
+		{% if approved %}
+			<div class="btn-group" role="group" aria-label="Organization Links" style="width: 100%;">
+				<a class="btn btn-secondary" style="width: 100%;" disabled>Chats</a>
+				<a class="btn btn-success" style="width: 100%;" href="/orgs/{{ org.id }}/logs">Logs</a>
+				<a class="btn btn-primary"   style="width: 100%;" href="/orgs/{{ org.id }}">Info</a>
+			</div>
+		{% else %}
+			<div class="btn-group" role="group" aria-label="Organization Links" style="width: 100%;">
+				<a class="btn btn-secondary" style="width: 100%;" disabled>Chats</a>
+				<a class="btn btn-success" style="width: 100%;" disabled>Logs</a>
+				<a class="btn btn-primary"   style="width: 100%;" disabled>Info</a>
+			</div>
+		{% endif %}
 	</div>
 </div>

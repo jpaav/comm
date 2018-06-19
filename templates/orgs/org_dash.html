@@ -16,11 +16,18 @@
 					</a>
 				</div>
 			</div>
-			{% if orgs.count == 0 %}
-				<p class="lead">You are not part of any organizations currently.</p>
+			{% if approved_orgs.count == 0 and unapproved_orgs.count == 0 %}
+				<p class="lead mt-5">You are not part of any organizations currently.</p>
 			{% endif %}
-			{% for org in orgs %}
-				{% include 'orgs/org_fragment.html' %}
+			{% for org in approved_orgs %}
+				{% with True as approved %}
+					{% include 'orgs/org_fragment.html' %}
+				{% endwith %}
+			{% endfor %}
+			{% for org in unapproved_orgs %}
+				{% with False as approved %}
+					{% include 'orgs/org_fragment.html' %}
+				{% endwith %}
 			{% endfor %}
 		</div>
 	</div>
