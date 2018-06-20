@@ -7,6 +7,8 @@ from orgs.models import Org
 
 
 class Tag(models.Model):
+	def __str__(self):
+		return 'Tag: ' + self.title
 	objects = models.Manager()
 	color = models.CharField(max_length=6)
 	title = models.CharField(max_length=100)
@@ -18,6 +20,8 @@ class Tag(models.Model):
 
 
 class Resident(models.Model):
+	def __str__(self):
+		return 'Resident: ' + self.name
 	objects = models.Manager()
 	name = models.CharField(max_length=50)
 	org = models.ForeignKey(
@@ -31,6 +35,8 @@ class Resident(models.Model):
 
 
 class Log(models.Model):
+	def __str__(self):
+		return 'Log: ' + self.name
 	objects = models.Manager()
 	org = models.ForeignKey(
 		Org,
@@ -43,6 +49,8 @@ class Log(models.Model):
 
 
 class Entry(models.Model):
+	def __str__(self):
+		return 'Entry: ' + self.message[:5]
 	objects = models.Manager()
 	residents = models.ManyToManyField(
 		Resident,

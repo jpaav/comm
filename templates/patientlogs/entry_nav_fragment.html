@@ -1,7 +1,7 @@
 <div class="w-100" style="text-align: center; vertical-align: center;">
 	<span>
 		{% if offset > 0 %}
-			<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset=0">
+			<a class="btn btn-primary btn-sm" href="?sort={{ sort }}&offset=0&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}">
 				<i class="fas fa-angle-double-left"></i>
 			</a>
 		{% else %}
@@ -12,7 +12,7 @@
 	</span>
 	<span>
 		{% if offset > 0 %}
-			<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset={{ offset|add:"-100" }}">
+			<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset={{ offset|add:"-100" }}&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}">
 				<i class="fas fa-angle-left"></i>
 			</a>
 		{% else %}
@@ -22,16 +22,29 @@
 		{% endif %}
 	</span>
 	<span>
-		{{ offset }}-{{ offset|add:entries.count }}
+		{{ offset|add:"1" }}-{{ offset|add:entries.count }}
 	</span>
 	<span>
-		<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset={{ offset|add:"100" }}">
-			<i class="fas fa-angle-right"></i>
-		</a>
+		{% if entries.count < 100 %}
+			<a class="btn btn-primary btn-sm disabled">
+				<i class="fas fa-angle-right"></i>
+			</a>
+		{% else %}
+			<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset={{ offset|add:"100" }}&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}">
+				<i class="fas fa-angle-right"></i>
+			</a>
+		{% endif %}
+
 	</span>
 	<span>
-		<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset=-1">
-			<i class="fas fa-angle-double-right"></i>
-		</a>
+		{% if entries.count < 100 %}
+			<a class="btn btn-primary btn-sm disabled">
+				<i class="fas fa-angle-double-right"></i>
+			</a>
+		{% else %}
+			<a class="btn btn-primary btn-sm" href="/logs/{{ log.id }}/?sort={{ sort }}&offset=-1&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}">
+				<i class="fas fa-angle-double-right"></i>
+			</a>
+		{% endif %}
 	</span>
 </div>

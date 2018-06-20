@@ -3,6 +3,8 @@ from django.db import models
 
 
 class Org(models.Model):
+	def __str__(self):
+		return 'Org: ' + self.name
 	objects = models.Manager()
 	name = models.CharField(max_length=50, null=True)
 	description = models.CharField(max_length=1000, null=True, blank=True)

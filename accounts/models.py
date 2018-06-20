@@ -9,6 +9,8 @@ from rooms.models import Org
 
 
 class Profile(models.Model):
+	def __str__(self):
+		return 'Profile: ' + self.user.get_full_name()
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	# The manager to get Profile objects
 	objects = models.Manager()

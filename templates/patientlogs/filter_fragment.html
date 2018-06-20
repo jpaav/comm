@@ -53,10 +53,12 @@
 	function toggle_filter(e, string){
 	    $(e.target).html(function(e, html){
 			if ($(this).find('svg').length === 0){
-			    console.log("add icon");
-			    return "<i class=\"far fa-check-circle\"></i>" + html;
+			    $(this).attr("aria-pressed", "true");
+			    $(this).addClass("active");
+			    return "<i class=\"fas fa-plus-square\"></i>" + html;
 			}else{
-                console.log("remove icon");
+                $(this).attr("aria-pressed", "false");
+			    $(this).removeClass("active");
                 $(this).find('svg').detach();
 			}
 	    });
@@ -78,7 +80,7 @@
 	}
 	$('.apply-filter').click(
 		function(e){
-			window.location.href = "/logs/{{ log.id }}/?sort={{ sort }}&offset={{ offset }}&tagfilter="
+			window.location.href = "/logs/{{ log.id }}/?sort={{ sort }}&offset=0&tagfilter="
 			    + tag_filter_string + "&resfilter=" + resident_filter_string + "&loggerfilter=" + logger_filter_string;
 		}
 	)

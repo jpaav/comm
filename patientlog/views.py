@@ -1,6 +1,6 @@
 import math
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet, Q
+from django.db.models import QuerySet, Q, Count
 from django.db.models.functions import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -32,23 +32,21 @@ def log_resolve_offset(all_filter_str, offset, sort, log_id):
 
 def log_resolve_sort_and_filter(all_filter_str, res_filter, tag_filter, logger_filter, sort, offset, log_id):
 	# Sorts by the newest timestamp in the entries
-	query = Q(log_id=log_id)
+	query = Q()
 	for res in str.split(res_filter, "_"):
 		if not res == "":
-			query = query & Q(residents=res)
+			query = query | Q(residents=res)
 	for tag in str.split(tag_filter, "_"):
 		if not tag == "":
-			query = query & Q(tags=tag)
+			query = query | Q(tags=tag)
 	for logger in str.split(logger_filter, "_"):
 		if not logger == "":
-			query = query & Q(logger_id=logger)
+			query = query | Q(logger_id=logger)
 	if sort == 'newest':
-		entries = Entry.objects.filter(query).order_by('-timestamp')[offset:offset+100]
-		return entries
+		return Entry.objects.filter(query, log_id=log_id).order_by('-timestamp')[offset:offset+100]
 	# Sorts by the oldest timestamp in the entries
 	elif sort == 'oldest':
-		entries = Entry.objects.filter(query).order_by('timestamp')[offset:offset+100]
-		return entries
+		return Entry.objects.filter(query, log_id=log_id).order_by('timestamp')[offset:offset+100]
 	# If the user supplies some bogus filter it will be caught here and changed to newest
 	else:
 		return redirect('/logs/' + str(log_id) + '/?sort=newest&offset=' + str(offset) + "&" + all_filter_str)
