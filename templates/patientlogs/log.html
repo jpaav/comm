@@ -5,7 +5,7 @@
 		<div class="col-md-2"></div>
 		<div class="col-md-8">
 			<div class="row">
-				<div class="col-lg-5 mb-5 pl-4" align="left">
+				<div class="col-lg-5 mb-3 pl-4" align="left">
 					<div class="mb-3 row">
 						<div class="btn-group btn-group-lg" role="group" aria-label="Entry Tools">
 							<a class="btn btn-primary" href="/logs/{{ log.id }}/new_entry/">
@@ -39,9 +39,22 @@
 						<div class="blue-scrollbar pr-2" style="overflow-y: scroll; overflow-x: hidden;">
 							{# This if statement checks if there are no entries to show a friendly message #}
 							{% if entries.count == 0 %}
-								<p class="lead px-5" style="margin-top: 20vh; text-align: center">No Entries yet... Hit the
-									<i class="fas fa-edit"></i>
-									button above to write the first one!</p>
+								{% if not loggerfilter and not tagfilter and not resfilter %}
+									<p class="lead px-4" style="margin-top: 20vh; text-align: center">
+										No Entries yet... Hit the
+										<i class="fas fa-edit"></i>
+										button above to write the first one!
+									</p>
+								{% else %}
+									<p class="lead px-4" style="margin-top: 15vh; text-align: center">
+										No Entries with these filters...
+									</p>
+									<p class="lead px-4" style="text-align: center;">
+										Remove them at the top right or hit the
+										<i class="fas fa-edit"></i>
+										button above to write the first one!
+									</p>
+								{% endif %}
 							{% endif %}
 							{# This for loop renders an entry card for each entry in the log #}
 							{% for entry in entries %}

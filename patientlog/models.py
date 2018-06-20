@@ -26,8 +26,8 @@ class Resident(models.Model):
 		related_name='resident_org'
 	)
 	room = models.CharField(max_length=20, blank=True)
-	timestamp_admitted = models.DateTimeField(default=datetime.now, blank=True)
-	timestamp_left = models.DateTimeField(default=datetime.now, blank=True)
+	timestamp_admitted = models.DateTimeField(default=datetime.now, blank=True, null=True)
+	timestamp_left = models.DateTimeField(default=datetime.now, blank=True, null=True)
 
 
 class Log(models.Model):

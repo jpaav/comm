@@ -52,12 +52,12 @@
 	);
 	function toggle_filter(e, string){
 	    $(e.target).html(function(e, html){
-			if (html.indexOf("<i class=\"far fa-check-circle\"></i>") === -1){
-			    console.log("add icon")
+			if ($(this).find('svg').length === 0){
+			    console.log("add icon");
 			    return "<i class=\"far fa-check-circle\"></i>" + html;
 			}else{
-                console.log("remove icon")
-				return html.replace('<i class=\"far fa-check-circle\"></i>', '');
+                console.log("remove icon");
+                $(this).find('svg').detach();
 			}
 	    });
 	    var new_id = e.target.id.split("-")[1];
@@ -78,17 +78,8 @@
 	}
 	$('.apply-filter').click(
 		function(e){
-		    {# Checks if there is a detail loaded. If there is none {{ detail }} will resolve to an empty string #}
-		    var hasDetail = "{{ detail }}";
-			if(hasDetail === "") {
-			    window.location.href = "/logs/{{ log.id }}/?sort={{ sort }}&offset={{ offset }}&tagfilter="
+			window.location.href = "/logs/{{ log.id }}/?sort={{ sort }}&offset={{ offset }}&tagfilter="
 			    + tag_filter_string + "&resfilter=" + resident_filter_string + "&loggerfilter=" + logger_filter_string;
-			}
-			else{
-			    window.location.href = "/logs/{{ log.id }}/entry/{{ detail.id }}/?sort={{ sort }}&offset={{ offset }}&"
-			    + tag_filter_string + "&" + resident_filter_string + "&" + logger_filter_string;
-			}
-
 		}
 	)
 </script>

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
-from orgs.forms import CreateOrgForm, CreateTagForm, CreateResidentForm
+from orgs.forms import CreateOrgForm, CreateTagForm, CreateResidentForm, UpdateTagForm, UpdateResidentForm
 from orgs.models import Org
 from orgs.tokens import join_org_token
 from patientlog.models import Log, Tag, Resident
@@ -93,14 +93,14 @@ def residents(request, org_id):
 	if request.user not in org.members.all():
 		return render(request, 'accounts/not_authorized.html')
 	if request.method == 'GET':
-		form = CreateResidentForm()
+		create_form = CreateResidentForm()
 	else:
-		form = CreateResidentForm(request.POST)
-		if form.is_valid():
-			resident = form.save(commit=False)
+		create_form = CreateResidentForm(request.POST)
+		if create_form.is_valid():
+			resident = create_form.save(commit=False)
 			resident.org = org
 			resident.save()
-	return render(request, 'orgs/residents.html', {'form': form, 'residents': residents})
+	return render(request, 'orgs/residents.html', {'create_form': create_form, 'residents': residents})
 
 
 def join(request, uidb64, token):
@@ -153,14 +153,32 @@ def residents_detail(request, org_id, res_id):
 		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'resident'})
 	residents = Resident.objects.filter(org=org)
 	if request.method == 'GET':
-		form = CreateResidentForm()
+		create_form = CreateResidentForm()
+		update_form = UpdateResidentForm(
+			initial={
+				'name': detail.name,
+				'room': detail.room,
+				'timestamp_admitted': detail.timestamp_admitted,
+				'timestamp_left': detail.timestamp_left
+			}
+		)
 	else:
-		form = CreateResidentForm(request.POST)
-		if form.is_valid():
-			resident = form.save(commit=False)
+		create_form = CreateResidentForm(request.POST)
+		update_form = UpdateResidentForm(request.POST)
+		if update_form.is_valid():
+			update = update_form.save(commit=False)
+			detail.name = update['name']
+			detail.room = update['room']
+			detail.timestamp_admitted = update['timestamp_admitted']
+			detail.timestamp_left = update['timestamp_left']
+			detail.save()
+			return redirect('/orgs/' + str(org_id) + '/residents/' + str(res_id))
+		if create_form.is_valid():
+			resident = create_form.save(commit=False)
 			resident.org = org
 			resident.save()
-	return render(request, 'orgs/residents.html', {'form': form, 'residents': residents, 'detail': detail})
+			return redirect('/orgs/' + str(org_id) + '/residents/' + str(res_id))
+	return render(request, 'orgs/residents.html', {'create_form': create_form, 'update_form': update_form, 'residents': residents, 'detail': detail})
 
 
 def residents_delete(request, org_id, res_id):
@@ -203,14 +221,28 @@ def tags_detail(request, org_id, tag_id):
 		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'resident'})
 	tags = Tag.objects.filter(org=org)
 	if request.method == 'GET':
-		form = CreateTagForm()
+		create_form = CreateTagForm()
+		update_form = UpdateTagForm(
+			initial={
+				'title': detail.title,
+				'color': detail.color
+			}
+		)
 	else:
-		form = CreateTagForm(request.POST)
-		if form.is_valid():
-			tag = form.save(commit=False)
+		create_form = CreateTagForm(request.POST)
+		update_form = UpdateTagForm(request.POST)
+		if update_form.is_valid():
+			update = update_form.save(commit=False)
+			detail.title = update.title
+			detail.color = update.color
+			detail.save()
+			return redirect('/orgs/' + str(org_id) + '/tags/' + str(tag_id))
+		if create_form.is_valid():
+			tag = create_form.save(commit=False)
 			tag.org = org
 			tag.save()
-	return render(request, 'orgs/tags.html', {'form': form, 'tags': tags, 'detail': detail})
+			return redirect('/orgs/' + str(org_id) + '/tags/' + str(tag_id))
+	return render(request, 'orgs/tags.html', {'create_form': create_form, 'update_form': update_form, 'tags': tags, 'detail': detail})
 
 
 def unapprove(request, org_id, user_id):
