@@ -50,10 +50,23 @@ class CreateTagForm(forms.Form):
 		title = self.cleaned_data['title']
 		return title
 
+	def clean_color(self):
+		color = self.cleaned_data['color']
+		# Remove hashtag if present
+		if color[0] == '#':
+			color = color[:-1]
+		if not len(color) == 6:
+			color = 'e9ecef'
+		try:
+			int(color, 16)
+		except ValueError:
+			color = 'e9ecef'
+		return color
+
 	def save(self, commit=True):
 		return Tag(
 			title=self.cleaned_data['title'],
-			color=self.cleaned_data['color'],
+			color=self.clean_color()
 		)
 
 
@@ -100,10 +113,23 @@ class UpdateTagForm(forms.Form):
 		attrs={'type': 'text',
 				'class': 'form-control'}))
 
+	def clean_color(self):
+		color = self.cleaned_data['color']
+		# Remove hashtag if present
+		if color[0] == '#':
+			color = color[1:]
+		if not len(color) == 6:
+			color = 'e9ecef'
+		try:
+			int(color, 16)
+		except ValueError:
+			color = 'e9ecef'
+		return color
+
 	def save(self, commit=True):
 		return Tag(
 			title=self.cleaned_data['title'],
-			color=self.cleaned_data['color'],
+			color=self.clean_color(),
 		)
 
 

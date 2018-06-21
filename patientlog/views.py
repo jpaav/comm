@@ -31,7 +31,7 @@ def log_resolve_offset(all_filter_str, offset, sort, log_id):
 
 
 def log_resolve_sort_and_filter(all_filter_str, res_filter, tag_filter, logger_filter, sort, offset, log_id):
-	# Sorts by the newest timestamp in the entries
+	# Separates each tag from the url and uses an OR filter to combine them with the overall query
 	query = Q()
 	for res in str.split(res_filter, "_"):
 		if not res == "":
@@ -42,11 +42,14 @@ def log_resolve_sort_and_filter(all_filter_str, res_filter, tag_filter, logger_f
 	for logger in str.split(logger_filter, "_"):
 		if not logger == "":
 			query = query | Q(logger_id=logger)
+	# Filters by query, AND the correct log
+	# Sorts by the timestamp in the entries
+	# Removes duplicates
+	# Cuts out 100 objects at the right index
 	if sort == 'newest':
-		return Entry.objects.filter(query, log_id=log_id).order_by('-timestamp')[offset:offset+100]
-	# Sorts by the oldest timestamp in the entries
+		return Entry.objects.filter(query, log_id=log_id).order_by('-timestamp').distinct()[offset:offset+100]
 	elif sort == 'oldest':
-		return Entry.objects.filter(query, log_id=log_id).order_by('timestamp')[offset:offset+100]
+		return Entry.objects.filter(query, log_id=log_id).order_by('timestamp').distinct()[offset:offset+100]
 	# If the user supplies some bogus filter it will be caught here and changed to newest
 	else:
 		return redirect('/logs/' + str(log_id) + '/?sort=newest&offset=' + str(offset) + "&" + all_filter_str)
@@ -133,7 +136,9 @@ def log_detail(request, log_id, entry_id):
 	except Entry.DoesNotExist:
 		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'entry'})
 	return render(request, 'patientlogs/log.html', {'log': cur_log, 'entries': entries, 'tags': tags,
-													'residents': residents, 'detail': detail, 'sort': sort, 'offset': offset})
+													'residents': residents, 'detail': detail, 'sort': sort, 'offset': offset,
+													'resfilter': res_filter, 'tagfilter': tag_filter,
+													'loggerfilter': logger_filter})
 
 
 def new_entry(request, log_id):

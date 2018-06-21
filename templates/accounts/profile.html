@@ -18,11 +18,6 @@
 			<div class="row">
 				<p class="lead">@{{ user.username }}</p>
 			</div>
-			{% if this_user %}
-				<div class="row">
-
-				</div>
-			{% endif %}
 			<p class="text-left">
 				{{ user.profile.bio }}
 			</p>
@@ -44,12 +39,5 @@
 {#				</table>#}
 {#			</div>#}
 		</div>
-		{% if this_user %}
-			<div class="col-md-2">
-
-			</div>
-		{% endif %}
-
 	</div>
-
 {% endblock %}

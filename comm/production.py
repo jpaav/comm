@@ -30,6 +30,9 @@ DEBUG = True
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]'] use this when debug=False
 ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', '0.0.0.0']
 
+# Login redirect
+LOGIN_REDIRECT_URL = '/orgs/dash/'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -140,7 +143,6 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
-# Default url to redirect to after successful login
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

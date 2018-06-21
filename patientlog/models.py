@@ -50,7 +50,7 @@ class Log(models.Model):
 
 class Entry(models.Model):
 	def __str__(self):
-		return 'Entry: ' + self.message[:5]
+		return 'Entry: ' + self.message[:500]
 	objects = models.Manager()
 	residents = models.ManyToManyField(
 		Resident,

@@ -25,6 +25,9 @@ SECRET_KEY = 'dtdg2uvindde%d(6p%((u5n_w70j(q5%tv_pm6q0l=02_j^hig'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Login redirect
+LOGIN_REDIRECT_URL = '/orgs/dash/'
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -138,5 +141,7 @@ EMAIL_HOST_USER = 'comm.messages@gmail.com'  # this is a testing account
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
-EMAIL_HOST_PASSWORD = 'asdf'
+EMAIL_HOST_PASSWORD = 'tendraltrails'
 EMAIL_PORT = 587
+
+# Tutorial images link: https://imgur.com/a/OPK8vP7

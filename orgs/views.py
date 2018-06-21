@@ -72,14 +72,14 @@ def tags(request, org_id):
 		return render(request, 'accounts/not_authorized.html')
 	tags = Tag.objects.filter(org=org)
 	if request.method == 'GET':
-		form = CreateTagForm()
+		create_form = CreateTagForm()
 	else:
-		form = CreateTagForm(request.POST)
-		if form.is_valid():
-			tag = form.save(commit=False)
+		create_form = CreateTagForm(request.POST)
+		if create_form.is_valid():
+			tag = create_form.save(commit=False)
 			tag.org = org
 			tag.save()
-	return render(request, 'orgs/tags.html', {'form': form, 'tags': tags})
+	return render(request, 'orgs/tags.html', {'create_form': create_form, 'tags': tags})
 
 
 def residents(request, org_id):
@@ -113,6 +113,10 @@ def join(request, uidb64, token):
 	# Catches if the activation link is bad
 	except(TypeError, ValueError, OverflowError, Org.DoesNotExist):
 		org = None
+	if org.unapproved.filter(pk=request.user.id).exists():
+		return HttpResponse('You are already unapproved for this organization.')
+	if org.members.filter(pk=request.user.id).exists():
+		return HttpResponse('You are already a member for this organization.')
 	if org is not None and join_org_token.check_token(org, token):
 		# Adds current user to org
 		org.unapproved.add(request.user)
@@ -145,8 +149,6 @@ def residents_detail(request, org_id, res_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
 	org = Org.objects.get(pk=org_id)
-	if not request.user == org.owner:
-		return render(request, 'accounts/not_authorized.html')
 	try:
 		detail = Resident.objects.get(pk=res_id)
 	except Resident.DoesNotExist:

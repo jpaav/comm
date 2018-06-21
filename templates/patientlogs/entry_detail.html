@@ -7,9 +7,12 @@
 	</span>
 	<span class="lead" style="float: right;">
 		{% for tag in detail.tags.all %}
-			<button class="btn btn-sm" style="background-color: #{{ tag.color }}">
-				{{ tag.title }}
-			</button>
+			<a href="/orgs/{{ log.org.id }}/tags/{{ tag.id }}">
+				<button class="btn btn-sm" style="background-color: #{{ tag.color }}">
+						{{ tag.title }}
+				</button>
+			</a>
+
 		{% endfor %}
 	</span>
 
@@ -22,7 +25,9 @@
 		<p class="lead">
 			Residents involved:
 			{% for resident in detail.residents.all %}
-				{{ resident.name }},
+				<a href="/orgs/{{ log.org.id }}/residents/{{ resident.id }}" class="btn btn-secondary btn-sm">
+					{{ resident.name }}
+				</a>
 			{% endfor %}
 		</p>
 	{% endif %}

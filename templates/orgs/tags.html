@@ -45,31 +45,7 @@
 					{% endfor %}
 				</div>
 				<div class="col-md-6">
-					{% if detail %}
-						{% include 'orgs/tag_detail_fragment.html' %}
-						<form method="post">
-						{% csrf_token %}
-						{% for field in update_form %}
-							<p align="left">
-								<div class="form-group row">
-									<label class="col-sm-3 col-form-label">{{ field.label }}</label>
-									<div class="col-sm-9"> {{ field }} </div>
-								</div>
-								{% if field.help_text %}
-									<small style="display: none">{{ field.help_text }}</small>
-								{% endif %}
-								{% for error in field.errors %}
-									<p style="color: red">{{ error }}</p>
-								{% endfor %}
-							</p>
-						{% endfor %}
-						<button class="btn btn-primary btn-lg" type="submit">Save</button>
-					</form>
-					{% else %}
-						<p class="lead my-5">
-							Use the arrows to see the details of the tags here.
-						</p>
-					{% endif %}
+					{% include 'orgs/tag_detail_fragment.html' %}
 				</div>
 			</div>
 

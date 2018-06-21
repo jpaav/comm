@@ -4,18 +4,18 @@
 		<div class="col-md-2"></div>
 		<div class="col-md-4 col-sm-12" style="text-align: left;">
 			<h1 class="display-1" style="margin-bottom: 24px;">Organizations</h1>
-			<div class="row">
-				<div class="col-md-4 col-sm-4" style="margin-bottom: 24px;">
-					<a style="text-decoration: none;">
-						<button class="btn btn-block btn-primary" disabled>Create</button>
-					</a>
-				</div>
-				<div class="col-md-4 col-sm-4" style="margin-bottom: 24px;">
-					<a style="text-decoration: none;">
-						<button class="btn btn-block btn-primary" data-toggle="modal" data-target="#joinOrgModal">Join</button>
-					</a>
-				</div>
-			</div>
+{#			<div class="row">#}
+{#				<div class="col-md-4 col-sm-4" style="margin-bottom: 24px;">#}
+{#					<a style="text-decoration: none;">#}
+{#						<button class="btn btn-block btn-primary" disabled>Create</button>#}
+{#					</a>#}
+{#				</div>#}
+{#				<div class="col-md-4 col-sm-4" style="margin-bottom: 24px;">#}
+{#					<a style="text-decoration: none;">#}
+{#						<button class="btn btn-block btn-primary" data-toggle="modal" data-target="#joinOrgModal">Join</button>#}
+{#					</a>#}
+{#				</div>#}
+{#			</div>#}
 			{% if approved_orgs.count == 0 and unapproved_orgs.count == 0 %}
 				<p class="lead mt-5">You are not part of any organizations currently.</p>
 			{% endif %}
@@ -41,7 +41,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<input type="text" id="joinPasteBox">
+					<label for="joinPasteBox">Link: </label><input type="text" id="joinPasteBox">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" id="joinSubmit">Join</button>
@@ -53,8 +53,8 @@
 	</div>
 	<script>
 		$('#joinSubmit').click(
-		    function{
-		        location.href = $('#joinPasteBox').value;
+		    function(e){
+		        window.location.replace($('#joinPasteBox').val());
 		    }
 		);
 
