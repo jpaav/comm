@@ -1,7 +1,7 @@
 {% if tagfilter or loggerfilter or resfilter %}
 	{% load name_from_id %}
 	<p class="small">
-		<i class="fas fa-filter"></i>
+		<i class="fas fa-filter mr-2"></i>
 		{% if tagfilter %}
 			<button class="btn btn-sm mb-1">
 				Tags: {{ tagfilter|tag_name_from_id }}
@@ -33,7 +33,7 @@
 	</p>
 {% else %}
 	<p class="small">
-		<i class="fas fa-filter"></i>
+		<i class="fas fa-filter mr-2"></i>
 		<button class="btn btn-sm" aria-pressed="true" data-toggle="collapse" href="#filterPanel" role="button" id="filterPanelToggle">
 			No filters
 		</button>

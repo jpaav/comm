@@ -22,11 +22,27 @@
 				{{ member.get_full_name }}
 			</button>
 		{% endfor %}
+		<p class="mt-2"></p>
+		<span>
+			<label class="lead" for="id_timestamp_admitted">From:</label><input type="date" name="timestamp_admitted" class="form-control" id="id_timestamp_admitted">
+		</span>
+		<span>
+			<label class="lead" for="id_timestamp_left">To:</label><input type="date" name="timestamp_admitted" class="form-control" id="id_timestamp_left">
+		</span>
 		<hr/>
-		<div class="mt-4">
-			<button class="btn btn-success btn-block apply-filter">
-				Apply Filter
-			</button>
+		<div class="mt-4 row">
+			<div class="col-md-6">
+				<button class="btn btn-success btn-block apply-filter">
+					Apply Filter
+				</button>
+			</div>
+			<div class="col-md-6">
+				<button class="btn btn-danger btn-block" data-toggle="collapse" href="#filterPanel" role="button">
+					Close Filters
+				</button>
+			</div>
+
+
 		</div>
 	</div>
 </div>
@@ -35,6 +51,7 @@
 	var tag_filter_string = "";
 	var resident_filter_string = "";
 	var logger_filter_string = "";
+	var daterange_filter_string = "";
 	$('.filter-tag-toggle').click(
 	    function(e){
 			tag_filter_string = toggle_filter(e, tag_filter_string);
@@ -80,8 +97,12 @@
 	}
 	$('.apply-filter').click(
 		function(e){
+			{# Collect daterange #}
+			daterange_filter_string = $('#id_timestamp_admitted').val() + '_' + $('#id_timestamp_left').val();
+            {# Redirect to page #}
 			window.location.href = "/logs/{{ log.id }}/?sort={{ sort }}&offset=0&tagfilter="
-			    + tag_filter_string + "&resfilter=" + resident_filter_string + "&loggerfilter=" + logger_filter_string;
+			    + tag_filter_string + "&resfilter=" + resident_filter_string + "&loggerfilter=" + logger_filter_string
+				+ "&daterangefilter=" + daterange_filter_string;
 		}
-	)
+	);
 </script>

@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.utils.encoding import force_text, force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
+from comm import settings
 from orgs.forms import CreateOrgForm, CreateTagForm, CreateResidentForm, UpdateTagForm, UpdateResidentForm
 from orgs.models import Org
 from orgs.tokens import join_org_token
@@ -24,7 +25,7 @@ def org(request, org_id):
 		uid = urlsafe_base64_encode(force_bytes(org.pk))
 		token = join_org_token.make_token(org)
 		return render(request, 'orgs/org.html', {'org': org, 'uid': uid, 'token': token,
-												'domain': get_current_site(request).domain})
+		                                         'domain': get_current_site(request).domain})
 	return render(request, 'orgs/org.html', {'org': org})
 
 
@@ -61,6 +62,8 @@ def logs(request, org_id):
 	if request.user not in org.members.all():
 		return render(request, 'accounts/not_authorized.html')
 	logs = Log.objects.filter(org=org)
+	if logs.count() == 1 and settings.SIMPLE_UI:
+		return redirect('/logs/' + str(logs.first().id))
 	return render(request, 'orgs/logs.html', {'logs': logs})
 
 
@@ -180,7 +183,8 @@ def residents_detail(request, org_id, res_id):
 			resident.org = org
 			resident.save()
 			return redirect('/orgs/' + str(org_id) + '/residents/' + str(res_id))
-	return render(request, 'orgs/residents.html', {'create_form': create_form, 'update_form': update_form, 'residents': residents, 'detail': detail})
+	return render(request, 'orgs/residents.html',
+	              {'create_form': create_form, 'update_form': update_form, 'residents': residents, 'detail': detail})
 
 
 def residents_delete(request, org_id, res_id):
@@ -244,7 +248,8 @@ def tags_detail(request, org_id, tag_id):
 			tag.org = org
 			tag.save()
 			return redirect('/orgs/' + str(org_id) + '/tags/' + str(tag_id))
-	return render(request, 'orgs/tags.html', {'create_form': create_form, 'update_form': update_form, 'tags': tags, 'detail': detail})
+	return render(request, 'orgs/tags.html',
+	              {'create_form': create_form, 'update_form': update_form, 'tags': tags, 'detail': detail})
 
 
 def unapprove(request, org_id, user_id):

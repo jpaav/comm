@@ -5,6 +5,7 @@ from django.db.models.functions import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
+from comm import settings
 from patientlog.forms import CreateEntryForm
 from patientlog.models import Log, Entry, Resident, Tag
 
@@ -71,7 +72,8 @@ def log(request, log_id):
 	res_filter = request.GET.get('resfilter', '')
 	tag_filter = request.GET.get('tagfilter', '')
 	logger_filter = request.GET.get('loggerfilter', '')
-	all_filter_str = "resfilter=" + res_filter + "&tagfilter=" + tag_filter + "&loggerfilter=" + logger_filter
+	daterange_filter = request.GET.get('daterangefilter', '')
+	all_filter_str = "resfilter=" + res_filter + "&tagfilter=" + tag_filter + "&loggerfilter=" + logger_filter + "&daterangefilter=" + daterange_filter
 	try:
 		offset = int(request.GET.get('offset', '0'))
 	# If the user supplies some bogus offset it will be caught here and changed to zero
@@ -92,7 +94,8 @@ def log(request, log_id):
 		entries = sort_res
 	return render(request, 'patientlogs/log.html', {'log': cur_log, 'entries': entries, 'tags': tags,
 													'residents': residents, 'sort': sort, 'offset': offset,
-													'resfilter': res_filter, 'tagfilter': tag_filter, 'loggerfilter': logger_filter})
+													'resfilter': res_filter, 'tagfilter': tag_filter, 'loggerfilter': logger_filter,
+													})
 
 
 def log_detail(request, log_id, entry_id):
@@ -138,7 +141,7 @@ def log_detail(request, log_id, entry_id):
 	return render(request, 'patientlogs/log.html', {'log': cur_log, 'entries': entries, 'tags': tags,
 													'residents': residents, 'detail': detail, 'sort': sort, 'offset': offset,
 													'resfilter': res_filter, 'tagfilter': tag_filter,
-													'loggerfilter': logger_filter})
+													'loggerfilter': logger_filter, 'daterangefilter': None})
 
 
 def new_entry(request, log_id):

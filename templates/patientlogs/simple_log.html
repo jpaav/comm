@@ -1,0 +1,98 @@
+<div class="mb-3 row">
+	<div class="btn-group btn-group-lg col-md-4" role="group" aria-label="Entry Tools">
+		<a class="btn btn-primary" href="/logs/{{ log.id }}/new_entry/" title="New Entry">
+			<i class="fas fa-edit"></i> New Entry
+		</a>
+		<a class="btn btn-warning" href="/orgs/{{ log.org.id }}/residents/" title="Resident Manager">
+			<i class="fas fa-address-card"></i> Residents
+		</a>
+		<a class="btn btn-info" data-toggle="collapse" href="#filterPanel" role="button" id="filterPanelToggle" title="Filter">
+			<i class="fas fa-filter"></i> Filters
+		</a>
+		<button id="btnGroupDrop" type="button" class="btn btn-success dropdown-toggle text-capitalize" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Sorting Type">
+			{{ sort }}
+		</button>
+		<div class="dropdown-menu" aria-labelledby="btnGroupDrop">
+			<a class="dropdown-item" href="?sort=newest&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}">Newest</a>
+			<a class="dropdown-item" href="?sort=oldest&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}">Oldest</a>
+		</div>
+	</div>
+	<div class="col-md-4" align="right">
+		{% include 'patientlogs/entry_nav_fragment.html' %}
+	</div>
+</div>
+<div align="left">
+	{% include 'patientlogs/filter_display_fragment.html' %}
+</div>
+<div align="left">
+	{% include 'patientlogs/filter_fragment.html' %}
+</div>
+
+<div class="table-responsive" align="left">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Tags</th>
+				<th><i class="fas fa-address-card"></i></th>
+				<th>Timestamp</th>
+				<th>Author</th>
+				<th>Message</th>
+			</tr>
+		</thead>
+		{% for entry in entries %}
+			<tr>
+				<td>
+					<a href="#" data-toggle="popover" data-trigger="hover" title="Tags" id="tag-popover-{{ entry.id }}">
+						<i class="fas fa-tags"></i>
+					</a>
+				</td>
+				<td>
+					<a href="#" data-toggle="popover" data-trigger="hover" title="Residents" id="resident-popover-{{ entry.id }}">
+						<i class="fas fa-address-card"></i>
+					</a>
+				</td>
+				<td style="white-space: nowrap;">
+					{{ entry.timestamp|date:"m/j/y g:i A" }}
+				</td>
+				<td>{{ entry.logger.get_full_name }}</td>
+				<td>{{ entry.message }}</td>
+				<td></td>
+			</tr>
+		{% endfor %}
+	</table>
+</div>
+{% include 'patientlogs/entry_nav_fragment.html' %}
+{% for entry in entries %}
+	<div id="tag-popover-{{ entry.id }}-content" class="d-none">
+		{% for tag in entry.tags.all %}
+			<button class="btn btn-sm" style="background-color: #{{ tag.color }}">
+				{{ tag.title }}
+			</button>
+		{% empty %}
+			No Tags
+		{% endfor %}
+	</div>
+	<div id="resident-popover-{{ entry.id }}-content" class="d-none">
+		{% for resident in entry.residents.all %}
+			<a class="btn btn-warning btn-sm">
+				{{ resident.name }}
+			</a>
+		{% empty %}
+			No Residents
+		{% endfor %}
+	</div>
+{% endfor %}
+<script>
+$(document).ready(function(){
+    $("[data-toggle=popover]").each(function(i, obj) {
+		$(this).popover({
+			html: true,
+			content: function() {
+			var id = $(this).attr('id');
+			return $('#'+id+'-content').html();
+			}
+		});
+	});
+});
+</script>
+

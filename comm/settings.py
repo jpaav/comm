@@ -25,8 +25,6 @@ SECRET_KEY = 'dtdg2uvindde%d(6p%((u5n_w70j(q5%tv_pm6q0l=02_j^hig'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Login redirect
-LOGIN_REDIRECT_URL = '/orgs/dash/'
 
 ALLOWED_HOSTS = []
 
@@ -145,3 +143,15 @@ EMAIL_HOST_PASSWORD = 'tendraltrails'
 EMAIL_PORT = 587
 
 # Tutorial images link: https://imgur.com/a/OPK8vP7
+
+SIMPLE_UI = True
+SIMPLE_LOG_ID = 4
+
+# Login redirect
+if SIMPLE_UI:
+	LOGIN_REDIRECT_URL = '/logs/' + str(SIMPLE_LOG_ID)
+else:
+	LOGIN_REDIRECT_URL = '/orgs/dash/'
+
+TEMPLATES[0]['OPTIONS']['context_processors'].append("comm.context_processors.is_simple_processor")
+TEMPLATES[0]['OPTIONS']['context_processors'].append("comm.context_processors.simple_log")

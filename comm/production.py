@@ -30,9 +30,6 @@ DEBUG = True
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]'] use this when debug=False
 ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1', '0.0.0.0']
 
-# Login redirect
-LOGIN_REDIRECT_URL = '/orgs/dash/'
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -146,11 +143,21 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-LOGIN_REDIRECT_URL = '/orgs/dash/'
 
 EMAIL_HOST_USER = 'comm.messages@gmail.com'  # this is a testing account
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
-# EMAIL_HOST_PASSWORD = 'asdf'
 EMAIL_PORT = 587
+
+SIMPLE_UI = True
+SIMPLE_LOG_ID = 4
+
+# Login redirect
+if SIMPLE_UI:
+	LOGIN_REDIRECT_URL = '/logs/' + str(SIMPLE_LOG_ID)
+else:
+	LOGIN_REDIRECT_URL = '/orgs/dash/'
+
+TEMPLATES[0]['OPTIONS']['context_processors'].append("comm.context_processors.is_simple_processor")
+TEMPLATES[0]['OPTIONS']['context_processors'].append("comm.context_processors.simple_log")
