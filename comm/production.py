@@ -150,8 +150,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD']
 EMAIL_PORT = 587
 
-SIMPLE_UI = True
-SIMPLE_LOG_ID = 1
+SIMPLE_UI = bool(os.environ['SIMPLE_UI'])
+SIMPLE_LOG_ID = int(os.environ['SIMPLE_LOG_ID'])
 
 # Login redirect
 if SIMPLE_UI:
