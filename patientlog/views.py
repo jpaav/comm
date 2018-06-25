@@ -51,8 +51,8 @@ def log_resolve_sort_and_filter(all_filter_str, res_filter, tag_filter, logger_f
 		try:
 			start_date = datetime.datetime.strptime(dates[0], "%Y-%m-%d")
 			end_date = datetime.datetime.strptime(dates[1], "%Y-%m-%d")
-			query &= Q(timestamp__gt=start_date)
-			query &= Q(timestamp__lt=end_date)
+			query &= Q(timestamp__gte=start_date)
+			query &= Q(timestamp__lte=end_date)
 		except ValueError:
 			pass
 
@@ -108,7 +108,7 @@ def log(request, log_id):
 	return render(request, 'patientlogs/log.html', {'log': cur_log, 'entries': entries, 'tags': tags,
 													'residents': residents, 'sort': sort, 'offset': offset,
 													'resfilter': res_filter, 'tagfilter': tag_filter, 'loggerfilter': logger_filter,
-													})
+													'daterangefilter': daterange_filter})
 
 
 def log_detail(request, log_id, entry_id):
@@ -155,7 +155,7 @@ def log_detail(request, log_id, entry_id):
 	return render(request, 'patientlogs/log.html', {'log': cur_log, 'entries': entries, 'tags': tags,
 													'residents': residents, 'detail': detail, 'sort': sort, 'offset': offset,
 													'resfilter': res_filter, 'tagfilter': tag_filter,
-													'loggerfilter': logger_filter, 'daterangefilter': None})
+													'loggerfilter': logger_filter, 'daterangefilter': daterange_filter})
 
 
 def send_email_alert(entry):

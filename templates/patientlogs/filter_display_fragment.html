@@ -1,11 +1,11 @@
-{% if tagfilter or loggerfilter or resfilter %}
+{% if tagfilter or loggerfilter or resfilter or daterangefilter %}
 	{% load name_from_id %}
 	<p class="small">
 		<i class="fas fa-filter mr-2"></i>
 		{% if tagfilter %}
 			<button class="btn btn-sm mb-1">
 				Tags: {{ tagfilter|tag_name_from_id }}
-				<a href="?sort={{ sort }}&offset={{ offset }}&tagfilter=&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}">
+				<a href="?sort={{ sort }}&offset={{ offset }}&tagfilter=&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}&daterangefilter={{ daterangefilter }}">
 					<i class="fas fa-times-circle" style="color: red;"></i>
 				</a>
 			</button>
@@ -13,7 +13,7 @@
 		{% if resfilter %}
 			<button class="btn btn-sm mb-1">
 				Residents: {{ resfilter|resident_name_from_id }}
-				<a href="?sort={{ sort }}&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter=&loggerfilter={{ loggerfilter }}">
+				<a href="?sort={{ sort }}&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter=&loggerfilter={{ loggerfilter }}&daterangefilter={{ daterangefilter }}">
 					<i class="fas fa-times-circle" style="color: red;"></i>
 				</a>
 			</button>
@@ -21,13 +21,21 @@
 		{% if loggerfilter %}
 			<button class="btn btn-sm mb-1">
 				Loggers: {{ loggerfilter|logger_name_from_id }}
-				<a href="?sort={{ sort }}&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter=">
+				<a href="?sort={{ sort }}&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter=&daterangefilter={{ daterangefilter }}">
+					<i class="fas fa-times-circle" style="color: red;"></i>
+				</a>
+			</button>
+		{% endif %}
+		{% if daterangefilter %}
+			<button class="btn btn-sm mb-1">
+				Date range: {{ daterangefilter|format_daterange }}
+				<a href="?sort={{ sort }}&offset={{ offset }}&tagfilter={{ tagfilter }}&resfilter={{ resfilter }}&loggerfilter={{ loggerfilter }}&daterangefilter=">
 					<i class="fas fa-times-circle" style="color: red;"></i>
 				</a>
 			</button>
 		{% endif %}
 
-		<a class="btn btn-danger btn-sm mb-1" href="?sort={{ sort }}&offset={{ offset }}&tagfilter=&resfilter=&loggerfilter=">
+		<a class="btn btn-danger btn-sm mb-1" href="?sort={{ sort }}&offset={{ offset }}&tagfilter=&resfilter=&loggerfilter=&daterangefilter=">
 			Clear all
 		</a>
 	</p>

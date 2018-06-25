@@ -9,5 +9,8 @@ def is_simple_processor(request):
 
 
 def simple_log(request):
-	id = int(os.environ['SIMPLE_LOG_ID'])
+	try:
+		id = int(os.environ['SIMPLE_LOG_ID'])
+	except KeyError:
+		id = settings.SIMPLE_LOG_ID
 	return {'simple_log': Log.objects.get(pk=id)}

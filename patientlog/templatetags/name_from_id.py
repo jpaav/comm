@@ -48,6 +48,18 @@ def logger_name_from_id(ids):
 	return full_string[:-2]
 
 
+@register.tag
+def format_daterange(daterange):
+	try:
+		start, end = str.split(daterange, "_")
+		year_s, month_s, day_s = str.split(start, "-")
+		year_e, month_e, day_e = str.split(end, "-")
+		return month_s + "/" + day_s + "/" + year_s + " to " + month_e + "/" + day_e + "/" + year_e
+	except ValueError:
+		return daterange
+
+
 register.filter('tag_name_from_id', tag_name_from_id)
 register.filter('resident_name_from_id', resident_name_from_id)
 register.filter('logger_name_from_id', logger_name_from_id)
+register.filter('format_daterange', format_daterange)
