@@ -1,9 +1,12 @@
 import math
+
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import EmailMultiAlternatives
 from django.db.models import QuerySet, Q, Count
 from django.db.models.functions import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 
 from comm import settings
 from patientlog.forms import CreateEntryForm
@@ -144,6 +147,21 @@ def log_detail(request, log_id, entry_id):
 													'loggerfilter': logger_filter, 'daterangefilter': None})
 
 
+def send_email_alert(entry):
+	message = render_to_string('emails/email_alert.html', {
+		'entry': entry
+	})
+	mail_subject = 'Email Alert for Resident Activity'
+	to_email = []
+	for resident in entry.residents.all():
+		for advocate in resident.advocates.all():
+			to_email.append(advocate.email)
+	email = EmailMultiAlternatives(mail_subject, message, to=to_email)
+	email.content_subtype = 'html'
+	email.mixed_subtype = 'related'
+	email.send()
+
+
 def new_entry(request, log_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
@@ -167,8 +185,13 @@ def new_entry(request, log_id):
 			# Because this is many to many you have to add them after saving the inital object
 			for resident in form.clean_residents():
 				entry.residents.add(resident)
+			should_send = False
 			for tag in form.clean_tags():
 				entry.tags.add(tag)
+				if tag.should_email:
+					should_send = True
+			if should_send:
+				send_email_alert(entry)
 			return redirect('/logs/' + str(log_id))
 
 	return render(request, 'patientlogs/new_entry.html', {'log': log, 'form': form})

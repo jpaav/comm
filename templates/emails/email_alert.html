@@ -1,0 +1,28 @@
+{% autoescape off %}
+	<div class="container">
+		<body style="font-family: 'Proxima Nova Soft', 'Helvetica Neue', sans-serif;">
+			<div align="center">
+				<div style="background:linear-gradient(to top, #d1d1d1, #ffffff);height:500px;width:800px;">
+					<div style="position:relative;left:25px;top:25px;">
+						<p style="font-size: 2rem;">
+							A resident you advocate for was referenced in the following log entry.
+						</p>
+						<div>
+							<p>
+								Tags:
+								{% for tag in entry.tags.all %}
+									<span style="background-color: #{{ tag.color }}">{{ tag.title }}</span>
+								{% endfor %}
+								Message: {{ entry.message }}
+								Residents involved:
+								{% for resident in entry.residents.all %}
+									<span style="background-color: #aaaaaa">{{ resident.name }}</span>
+								{% endfor %}
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</body>
+	</div>
+{% endautoescape %}

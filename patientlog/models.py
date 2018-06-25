@@ -17,6 +17,8 @@ class Tag(models.Model):
 		null=False,
 		related_name='tag_org'
 	)
+	importance = models.CharField(max_length=1, default='1')
+	should_email = models.BooleanField(default=False)
 
 
 class Resident(models.Model):
@@ -32,6 +34,12 @@ class Resident(models.Model):
 	room = models.CharField(max_length=20, blank=True)
 	timestamp_admitted = models.DateTimeField(default=datetime.now, blank=True, null=True)
 	timestamp_left = models.DateTimeField(default=datetime.now, blank=True, null=True)
+	advocates = models.ManyToManyField(
+		User,
+		null=True,
+		blank=True,
+		related_name='advocates'
+	)
 
 
 class Log(models.Model):

@@ -52,6 +52,12 @@ def org_dash(request):
 	return render(request, 'orgs/org_dash.html', {'approved_orgs': approved_orgs, 'unapproved_orgs': unapproved_orgs})
 
 
+def get_form_kwargs(self):
+	kwargs = super(self).get_form_kwargs()
+	kwargs.update({'org': Org()})
+	return kwargs
+
+
 def logs(request, org_id):
 	if not request.user.is_authenticated():
 		return redirect('/login/')
@@ -96,13 +102,16 @@ def residents(request, org_id):
 	if request.user not in org.members.all():
 		return render(request, 'accounts/not_authorized.html')
 	if request.method == 'GET':
-		create_form = CreateResidentForm()
+		create_form = CreateResidentForm(org=org)
 	else:
-		create_form = CreateResidentForm(request.POST)
+		create_form = CreateResidentForm(request.POST, org=org)
 		if create_form.is_valid():
 			resident = create_form.save(commit=False)
 			resident.org = org
 			resident.save()
+			for advocate in create_form.cleaned_data['advocates']:
+				resident.advocates.add(advocate)
+			return redirect('/orgs/' + str(org_id) + '/residents/' + str(resident.id))
 	return render(request, 'orgs/residents.html', {'create_form': create_form, 'residents': residents})
 
 
@@ -158,18 +167,20 @@ def residents_detail(request, org_id, res_id):
 		return render(request, 'patientlogs/object_does_not_exist.html', {'obj_type': 'resident'})
 	residents = Resident.objects.filter(org=org)
 	if request.method == 'GET':
-		create_form = CreateResidentForm()
+		create_form = CreateResidentForm(org=org)
 		update_form = UpdateResidentForm(
 			initial={
 				'name': detail.name,
 				'room': detail.room,
 				'timestamp_admitted': detail.timestamp_admitted,
-				'timestamp_left': detail.timestamp_left
-			}
+				'timestamp_left': detail.timestamp_left,
+				'advocates': detail.advocates.all(),
+			},
+			org=org
 		)
 	else:
-		create_form = CreateResidentForm(request.POST)
-		update_form = UpdateResidentForm(request.POST)
+		create_form = CreateResidentForm(request.POST, org=org)
+		update_form = UpdateResidentForm(request.POST, org=org)
 		if update_form.is_valid():
 			update = update_form.save(commit=False)
 			detail.name = update['name']
@@ -177,11 +188,16 @@ def residents_detail(request, org_id, res_id):
 			detail.timestamp_admitted = update['timestamp_admitted']
 			detail.timestamp_left = update['timestamp_left']
 			detail.save()
+			detail.residents.clear()
+			for advocate in update_form.cleaned_data['advocates']:
+				detail.advocates.add(advocate)
 			return redirect('/orgs/' + str(org_id) + '/residents/' + str(res_id))
 		if create_form.is_valid():
 			resident = create_form.save(commit=False)
 			resident.org = org
 			resident.save()
+			for advocate in create_form.cleaned_data['advocates']:
+				resident.advocates.add(advocate)
 			return redirect('/orgs/' + str(org_id) + '/residents/' + str(res_id))
 	return render(request, 'orgs/residents.html',
 	              {'create_form': create_form, 'update_form': update_form, 'residents': residents, 'detail': detail})
@@ -231,7 +247,9 @@ def tags_detail(request, org_id, tag_id):
 		update_form = UpdateTagForm(
 			initial={
 				'title': detail.title,
-				'color': detail.color
+				'color': detail.color,
+				'importance': detail.importance,
+				'should_email': detail.should_email
 			}
 		)
 	else:
@@ -241,6 +259,8 @@ def tags_detail(request, org_id, tag_id):
 			update = update_form.save(commit=False)
 			detail.title = update.title
 			detail.color = update.color
+			detail.importance = update.importance
+			detail.should_email = update.should_email
 			detail.save()
 			return redirect('/orgs/' + str(org_id) + '/tags/' + str(tag_id))
 		if create_form.is_valid():
