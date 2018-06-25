@@ -11,12 +11,12 @@
 							<p>
 								Tags:
 								{% for tag in entry.tags.all %}
-									<span style="background-color: #{{ tag.color }}">{{ tag.title }}</span>
+									<span style="background-color: #{{ tag.color }}; padding: 5px; border-radius: 10px;">{{ tag.title }}</span>
 								{% endfor %}
 								Message: {{ entry.message }}
 								Residents involved:
 								{% for resident in entry.residents.all %}
-									<span style="background-color: #aaaaaa">{{ resident.name }}</span>
+									<span style="background-color: #aaaaaa; padding: 5px; border-radius: 10px;">{{ resident.name }}</span>
 								{% endfor %}
 							</p>
 						</div>

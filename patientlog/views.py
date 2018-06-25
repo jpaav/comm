@@ -34,18 +34,28 @@ def log_resolve_offset(all_filter_str, offset, sort, log_id):
 	return None
 
 
-def log_resolve_sort_and_filter(all_filter_str, res_filter, tag_filter, logger_filter, sort, offset, log_id):
+def log_resolve_sort_and_filter(all_filter_str, res_filter, tag_filter, logger_filter, daterange_filter, sort, offset, log_id):
 	# Separates each tag from the url and uses an OR filter to combine them with the overall query
 	query = Q()
 	for res in str.split(res_filter, "_"):
 		if not res == "":
-			query = query | Q(residents=res)
+			query |= Q(residents=res)
 	for tag in str.split(tag_filter, "_"):
 		if not tag == "":
-			query = query | Q(tags=tag)
+			query |= Q(tags=tag)
 	for logger in str.split(logger_filter, "_"):
 		if not logger == "":
-			query = query | Q(logger_id=logger)
+			query |= Q(logger_id=logger)
+	dates = str.split(daterange_filter, "_")
+	if len(dates) == 2:
+		try:
+			start_date = datetime.datetime.strptime(dates[0], "%Y-%m-%d")
+			end_date = datetime.datetime.strptime(dates[1], "%Y-%m-%d")
+			query &= Q(timestamp__gt=start_date)
+			query &= Q(timestamp__lt=end_date)
+		except ValueError:
+			pass
+
 	# Filters by query, AND the correct log
 	# Sorts by the timestamp in the entries
 	# Removes duplicates
@@ -89,7 +99,7 @@ def log(request, log_id):
 	offset_res = log_resolve_offset(all_filter_str, offset, sort, log_id)
 	if offset_res is not None:
 		return offset_res
-	sort_res = log_resolve_sort_and_filter(all_filter_str, res_filter, tag_filter, logger_filter, sort, offset, log_id)
+	sort_res = log_resolve_sort_and_filter(all_filter_str, res_filter, tag_filter, logger_filter, daterange_filter, sort, offset, log_id)
 	# Either redirect or use the sorted entries
 	if sort_res is HttpResponseRedirect:
 		return sort_res
@@ -117,7 +127,8 @@ def log_detail(request, log_id, entry_id):
 	res_filter = request.GET.get('resfilter', '')
 	tag_filter = request.GET.get('tagfilter', '')
 	logger_filter = request.GET.get('loggerfilter', '')
-	all_filter_str = "resfilter=" + res_filter + "&tagfilter=" + tag_filter + "&loggerfilter=" + logger_filter
+	daterange_filter = request.GET.get('daterangefilter', '')
+	all_filter_str = "resfilter=" + res_filter + "&tagfilter=" + tag_filter + "&loggerfilter=" + logger_filter + "&daterangefilter=" + daterange_filter
 	try:
 		offset = int(request.GET.get('offset', '0'))
 	# If the user supplies some bogus offset it will be caught here and changed to zero
@@ -130,7 +141,7 @@ def log_detail(request, log_id, entry_id):
 	offset_res = log_resolve_offset(all_filter_str, offset, sort, log_id)
 	if offset_res is not None:
 		return offset_res
-	sort_res = log_resolve_sort_and_filter(all_filter_str, res_filter, tag_filter, logger_filter, sort, offset, log_id)
+	sort_res = log_resolve_sort_and_filter(all_filter_str, res_filter, tag_filter, logger_filter, daterange_filter, sort, offset, log_id)
 	# Either redirect or use the sorted entries
 	if sort_res is HttpResponseRedirect:
 		return sort_res
