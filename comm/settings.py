@@ -144,7 +144,7 @@ EMAIL_PORT = 587
 
 # Tutorial images link: https://imgur.com/a/OPK8vP7
 
-SIMPLE_UI = True
+SIMPLE_UI = False
 SIMPLE_LOG_ID = 4
 
 # Login redirect

@@ -27,7 +27,7 @@
 	<div class="row">
 		{% if approved %}
 			<div class="btn-group" role="group" aria-label="Organization Links" style="width: 100%;">
-				<a class="btn btn-secondary" style="width: 100%;" disabled><i class="fas fa-comments"></i> Chats</a>
+				<a class="btn btn-secondary" style="width: 100%;" href="/orgs/{{ org.id }}/residents"><i class="fas fa-address-card"></i> Residents</a>
 				<a class="btn btn-success" style="width: 100%;" href="/orgs/{{ org.id }}/logs"><i class="fas fa-clipboard"></i> Logs</a>
 				<a class="btn btn-primary"   style="width: 100%;" href="/orgs/{{ org.id }}"><i class="fas fa-building"></i> Info</a>
 			</div>
